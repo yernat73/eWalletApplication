@@ -34,6 +34,40 @@ namespace eWalletApplication.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
+        public ActionResult Index(int? id)
+        {
+            if (id != null)
+            {
+                if (id != 0)
+                {
+                    Account account = db.Accounts.Find(id);
+                    if (account != null)
+                    {
+                        db.Entry(account).Reference(a => a.Icon).Load();
+                        ViewBag.Account = account;
+                    }
+                }
+
+            }
+
+
+            return Default();
+        }
+
+
+
+
+        public ActionResult About()
+        {
+            return Default();
+        }
+
+        public ActionResult Contact()
+        {
+            return Default();
+        }
+
+
 
         public ActionResult AddAccount()
         {
@@ -114,35 +148,21 @@ namespace eWalletApplication.Controllers
 
         }
 
-
-
-        public ActionResult Index(int? id)
+        public ActionResult EditAccount(int id)
         {
-            if(id != null)
+            Account account = db.Accounts.Find(id);
+            if (account != null)
             {
-                if (id != 0) {
-                    Account account = db.Accounts.Find(id);
-                    if (account != null)
-                    {
-                        db.Entry(account).Reference(a => a.Icon).Load();
-                        ViewBag.Account = account;
-                    }
-                }
-                
+                db.Entry(account).Reference(a => a.Icon).Load();
+                ViewBag.Account = account;
             }
-            
+
 
             return Default();
         }
 
-        public ActionResult About()
-        {
-            return Default();
-        }
 
-        public ActionResult Contact()
-        {
-            return Default();
-        }
+
+
     }
 }
