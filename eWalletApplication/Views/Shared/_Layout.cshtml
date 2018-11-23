@@ -51,10 +51,10 @@
                                 <li>
                                     
                                     <form action="/Home/DeleteAccount" method="post" class="form-inline" id="account-delete-form-@a.Id">
-                                        <input value="@a.Id" name="Id" style="display:none"/>
-                                        <a href="/Home/Index/@a.Id" class="col-9"><i class="@a.Icon.Name"></i> @a.Name </a>
-
-                                        <a href="#" class="col-3" onclick="document.getElementById('account-delete-form-@a.Id').submit();"><i class="fas fa-times"></i></a>
+                                        <input value="@a.Id" name="Id" style="display:none" />
+                                        <a href="/Home/Index/@a.Id" class="col-8"><i class="@a.Icon.Name"></i> @a.Name </a>
+                                        <a href="/Home/EditAccount/@a.Id" class="col-2 px-3"><i class="fas fa-pen"></i></a>
+                                        <a href="#" class="col-2 px-3" onclick="document.getElementById('account-delete-form-@a.Id').submit();"><i class="fas fa-times"></i></a>
                                     </form>
                                     
                                 </li>
