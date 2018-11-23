@@ -14,6 +14,7 @@ namespace eWalletApplication
         // For more information on configuring authentication, please visit https://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
+            
             // Configure the db context, user manager and signin manager to use a single instance per request
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
@@ -54,15 +55,15 @@ namespace eWalletApplication
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "265623490758086",
+               appSecret: "18a6df2d78e1a01f16f862b87f4da094");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "264261913655-pjhaofetro8rmksdh4o5p323irsi8h8f.apps.googleusercontent.com",
+                ClientSecret = "Krzm_wUVNKdtt38GCiSwi6s_"
+            });
         }
     }
 }

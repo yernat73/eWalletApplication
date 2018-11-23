@@ -8,6 +8,7 @@ namespace eWalletApplication
     {
         public void Configuration(IAppBuilder app)
         {
+            
             ConfigureAuth(app);
         }
     }

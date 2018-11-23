@@ -1,44 +1,175 @@
-﻿<!DOCTYPE html>
+﻿@using System.Activities.Statements
+@using Microsoft.AspNet.Identity
+@using eWalletApplication.Models
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <!-- MetisMenu CSS -->
+    <link href="../Vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
 
-</head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+    <!-- Morris Charts CSS -->
+    <link href="../Vendor/morrisjs/morris.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+</head>
+
+
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar" class="">
+            <div class="sidebar-header">
+                <a href="http://localhost:58194">
+                    <img src="~/Images/logo_light_1.png" class="img-fluid" />
+                </a>
+            </div>
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="http://localhost:58194"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-credit-card"></i> Accounts</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        @if (ViewBag.Accounts != null)
+                        {
+                            foreach (var a in ViewBag.Accounts)
+                            {
+                                <li>
+                                    
+                                    <form action="/Home/DeleteAccount" method="post" class="form-inline" id="account-delete-form-@a.Id">
+                                        <input value="@a.Id" name="Id" style="display:none"/>
+                                        <a href="/Home/Index/@a.Id" class="col-9"><i class="@a.Icon.Name"></i> @a.Name </a>
+
+                                        <a href="#" class="col-3" onclick="document.getElementById('account-delete-form-@a.Id').submit();"><i class="fas fa-times"></i></a>
+                                    </form>
+                                    
+                                </li>
+                            }
+                        }
+
+                        <li>
+                            <a href="/Home/AddAccount" class="text-center"><i class="fas fa-plus"></i></a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-book"></i> Categories</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li>
+                                <a href="#">Food</a>
+                            </li>
+                            <li>
+                                <a href="#">Roads</a>
+                            </li>
+                            <li>
+                                <a href="#">Housing</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </li>
+
+                <div class="list-unstyled">
+                    <li class="dropdown-divider"></li>
+                    <li>
+                        <a href="/Manage"><i class="fas fa-user"></i> User Profile</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                    </li>
+                    <li>
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <a href="javascript:document.getElementById('logoutForm').submit()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        }
+                    </li>
+                </div>
+
+
+            </ul>
+
+        </nav>
+        <!-- Page Content Holder -->
+        <div id="content" class="container-fluid p-0">
+            <header class="m-4 shadow">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+                        <button type="button" id="sidebarCollapse" class="navbar-btn">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                        <a href="#" title="Make tranfer" class="lead text-muted mr-3"><i class="fas fa-exchange-alt"></i></a>
+
+                    </div>
+                </nav>
+            </header>
+
+
+            <main class="container-fluid p-4">
+
+                @RenderBody()
+
+            </main>
+
+            <footer class="footer p-5 bg-dark mt-5">
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>
+
+        </div>
+
+
+
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        @Scripts.Render("~/bundles/bootstrap")
+
+        <!-- Metis Menu Plugin JavaScript -->
+        <script src="../Vendor/metisMenu/metisMenu.min.js"></script>
+        <!-- Morris Charts JavaScript -->
+        <script src="../Vendor/raphael/raphael.min.js"></script>
+        <script src="../Vendor/morrisjs/morris.min.js"></script>
+        <script src="../data/morris-data.js"></script>
+        <!-- Custom Theme JavaScript -->
+        <script src="../dist/js/sb-admin-2.js"></script>
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/af-2.3.2/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-1.5.0/sl-1.2.6/datatables.min.js"></script>
+
+
+        @RenderSection("scripts", required: false)
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar').toggleClass('active');
+                    $(this).toggleClass('active');
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#dataTable').DataTable();
+
+            });
+            
+        </script>
+
 </body>
+
 </html>
