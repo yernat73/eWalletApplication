@@ -120,14 +120,14 @@ namespace eWalletApplication.Controllers
         {
             if(id != null)
             {
-                Account account = db.Accounts.Find(id);
-                if (account != null)
-                {
-                    db.Entry(account).Reference(a => a.Icon).Load();
-                    ViewBag.Account = account;
+                if (id != 0) {
+                    Account account = db.Accounts.Find(id);
+                    if (account != null)
+                    {
+                        db.Entry(account).Reference(a => a.Icon).Load();
+                        ViewBag.Account = account;
+                    }
                 }
-
-
                 
             }
             
