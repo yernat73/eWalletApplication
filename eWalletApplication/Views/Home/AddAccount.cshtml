@@ -23,10 +23,8 @@
     <div class="col-10">
         <div class="row">
             
-            @if (Icons != null)
-            {
-                foreach (var i in Icons)
-                {
+            @if (Icons != null){
+                foreach (var i in Icons){
                     <div class="col m-2 p-0">
                         <a href="#" data-val="@i.Id" id="icon-@i.Id" class="btn btn-outline-dark select-change" style="font-size:xx-large" role="button">
                             <i class='@i.Name'></i>
@@ -35,8 +33,7 @@
                 }
                 <select name="IconId" id="icon" style="display:none">
                     
-                    @foreach (var i in Icons)
-                    {
+                    @foreach (var i in Icons){
                         <option value="@i.Id"></option>
 
                     }
