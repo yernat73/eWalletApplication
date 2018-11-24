@@ -100,7 +100,7 @@ namespace eWalletApplication.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddAccount([Bind(Include = "AccountId,Name,IconId")]Account account) {
+        public ActionResult AddAccount([Bind(Include = "AccountId,Name,IconId,Balance")]Account account) {
             if (Request.IsAuthenticated)
             {
                 try
