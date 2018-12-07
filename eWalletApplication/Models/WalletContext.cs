@@ -33,7 +33,7 @@ namespace eWalletApplication.Models
 
 
         public WalletContext() : base("name=WalletContext") {
-
+            Database.SetInitializer(new WalletDbInitializer());
         }
     }
 
