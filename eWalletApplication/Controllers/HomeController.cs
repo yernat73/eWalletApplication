@@ -241,6 +241,57 @@ namespace eWalletApplication.Controllers
 
         }
 
+        public ActionResult Retrieve() {
+            if (Request.IsAuthenticated)
+            {
+                string UserId = User.Identity.GetUserId();
+                var Accounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == true).ToList<Account>();
+                var AccountIcons = db.AccountIcons;
+                var DeletedAccounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == false).ToList<Account>();
+
+                ViewBag.Accounts = Accounts;
+                ViewBag.AccountIcons = AccountIcons;
+                ViewBag.DeletedAccounts = DeletedAccounts;
+
+                foreach (Account account in Accounts)
+                {
+                    db.Entry(account).Reference(a => a.Icon).Load();
+                }
+                foreach (Account account in DeletedAccounts)
+                {
+                    db.Entry(account).Reference(a => a.Icon).Load();
+                }
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult Retrieve(int id)
+        {
+            if (Request.IsAuthenticated)
+            {
+                Account Account = db.Accounts.Find(id);
+                if (Account != null)
+                {
+                    Account.Active = true;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+                return RedirectToAction("Retrieve", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
 
     }
 }

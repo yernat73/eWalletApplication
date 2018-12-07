@@ -531,6 +531,7 @@
     <Content Include="Vendor\font-awesome\scss\_variables.scss" />
     <Content Include="Views\Home\AddAccount.cshtml" />
     <Content Include="Views\Home\EditAccount.cshtml" />
+    <Content Include="Views\Home\Retrieve.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

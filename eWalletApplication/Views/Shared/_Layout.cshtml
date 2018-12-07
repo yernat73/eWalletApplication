@@ -45,6 +45,7 @@
                         {
                             <li>
                                 <a href="/Home/Index/0"><i class="fas fa-money-check"></i> All Accounts</a>
+                                
                             </li>
                             foreach (var a in ViewBag.Accounts)
                             {
@@ -62,7 +63,11 @@
                         }
 
                         <li>
-                            <a href="/Home/AddAccount" class="text-center"><i class="fas fa-plus"></i></a>
+                            <div class="row m-0">
+                                <a href="/Home/AddAccount" class="text-center col"><i class="fas fa-plus"></i></a>
+                                <a href="/Home/Retrieve" class="text-center col" ><i class="fas fa-reply"></i></a>
+                            </div>
+                            
                         </li>
                     </ul>
                 </li>
