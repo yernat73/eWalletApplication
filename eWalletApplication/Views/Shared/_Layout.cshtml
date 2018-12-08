@@ -11,12 +11,12 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <!-- MetisMenu CSS -->
-    <link href="../Vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link href="/Vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
     <!-- Custom CSS -->
 
-    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
     <!-- Morris Charts CSS -->
-    <link href="../Vendor/morrisjs/morris.css" rel="stylesheet">
+    <link href="/Vendor/morrisjs/morris.css" rel="stylesheet">
     <!-- Custom Fonts -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
@@ -45,6 +45,7 @@
                         {
                             <li>
                                 <a href="/Home/Index/0"><i class="fas fa-money-check"></i> All Accounts</a>
+                                
                             </li>
                             foreach (var a in ViewBag.Accounts)
                             {
@@ -62,7 +63,11 @@
                         }
 
                         <li>
-                            <a href="/Home/AddAccount" class="text-center"><i class="fas fa-plus"></i></a>
+                            <div class="row m-0">
+                                <a href="/Home/AddAccount" class="text-center col"><i class="fas fa-plus"></i></a>
+                                <a href="/Home/Retrieve" class="text-center col" ><i class="fas fa-reply"></i></a>
+                            </div>
+                            
                         </li>
                     </ul>
                 </li>
@@ -142,13 +147,13 @@
         @Scripts.Render("~/bundles/bootstrap")
 
         <!-- Metis Menu Plugin JavaScript -->
-        <script src="../Vendor/metisMenu/metisMenu.min.js"></script>
+        <script src="/Vendor/metisMenu/metisMenu.min.js"></script>
         <!-- Morris Charts JavaScript -->
-        <script src="../Vendor/raphael/raphael.min.js"></script>
-        <script src="../Vendor/morrisjs/morris.min.js"></script>
-        <script src="../data/morris-data.js"></script>
+        <script src="/Vendor/raphael/raphael.min.js"></script>
+        <script src="/Vendor/morrisjs/morris.min.js"></script>
+        <script src="/data/morris-data.js"></script>
         <!-- Custom Theme JavaScript -->
-        <script src="../dist/js/sb-admin-2.js"></script>
+        <script src="/dist/js/sb-admin-2.js"></script>
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>

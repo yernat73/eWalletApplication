@@ -33,7 +33,7 @@ namespace eWalletApplication.Models
 
 
         public WalletContext() : base("name=WalletContext") {
-
+            Database.SetInitializer(new WalletDbInitializer());
         }
     }
 
@@ -41,11 +41,13 @@ namespace eWalletApplication.Models
     {
         protected override void Seed(WalletContext context)
         {
+            // SEED FOR ACOUNT ICONS
             context.AccountIcons.Add(new AccountIcon { Name = "fas fa-money-bill" });
             context.AccountIcons.Add(new AccountIcon { Name = "fab fa-cc-mastercard" });
             context.AccountIcons.Add(new AccountIcon { Name = "fab fa-cc-visa" });
             context.AccountIcons.Add(new AccountIcon { Name = "fab fa-cc-paypal" });
             context.AccountIcons.Add(new AccountIcon { Name = "fas fa-money-check-alt"});
+            context.AccountIcons.Add(new AccountIcon { Name = "fab fa-cc-apple-pay" });
 
 
 

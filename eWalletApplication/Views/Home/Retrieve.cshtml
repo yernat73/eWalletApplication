@@ -1,0 +1,55 @@
+﻿@model IEnumerable<eWalletApplication.Models.Account>
+
+@{
+    ViewBag.Title = "Retrieve";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+
+<h2>View</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Icon.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Balance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Active)
+        </th>
+        <th>
+
+        </th>
+    </tr>
+
+@foreach (var item in ViewBag.DeletedAccounts) {
+    <tr>
+        <td>
+            <i class="@item.Icon.Name">
+        </td>
+        <td>
+            @item.Name
+        </td>
+        <td>
+            @item.Balance
+        </td>
+        <td>
+            @item.Active
+        </td>
+        <td>
+            <form action="/Home/Retrieve" method="post">
+                <input name="id" value="@item.Id" hidden/>
+                <button type="submit" class="btn btn-primary">Retrieve</button>
+            </form>
+        </td>
+    </tr>
+}
+
+</table>
