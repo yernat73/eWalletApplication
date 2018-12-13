@@ -21,6 +21,11 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
     @Scripts.Render("~/bundles/jquery")
+    @{ 
+        string successMessage = ViewBag.SuccessMessage;
+
+    }
+
 </head>
 
 
@@ -128,12 +133,21 @@
 
 
             <main class="container-fluid p-4" style="min-height:700px">
+                @if (successMessage != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @successMessage
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
 
                 @RenderBody()
 
             </main>
 
-            <footer class="footer p-5 bg-dark mt-5">
+            <footer class="footer p-5 bg-dark">
                 <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
             </footer>
 
