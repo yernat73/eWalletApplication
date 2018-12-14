@@ -19,7 +19,7 @@ namespace eWalletApplication.Controllers
         public void LoadView() {
             string UserId = User.Identity.GetUserId();
             var Accounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == true).ToList<Account>();
-            this.ViewBag.Accounts = Accounts;
+            ViewBag.Accounts = Accounts;
             var AccountIcons = db.AccountIcons;
             ViewBag.AccountIcons = AccountIcons;
             foreach (Account account in Accounts)
@@ -39,19 +39,23 @@ namespace eWalletApplication.Controllers
         }
 
 
-        public ActionResult Index(int? accountId)
+        public ActionResult Index(int? id)
         {
             if (Request.IsAuthenticated)
             {
-                if (accountId != null)
+                if (id != null)
                 {
-                    if (accountId != 0)
+                    if (id != 0)
                     {
-                        Account account = db.Accounts.Find(accountId);
-                        if (account != null)
+                        Account Account = db.Accounts.Find(id);
+                        if (Account != null)
                         {
-                            db.Entry(account).Reference(a => a.Icon).Load();
-                            ViewBag.Account = account;
+                            db.Entry(Account).Reference(a => a.Icon).Load();
+                            ViewBag.Account = Account;
+                        }
+                        else
+                        {
+                            ViewBag.ErrorMessage = "Account not Found";
                         }
                     }
                 }
