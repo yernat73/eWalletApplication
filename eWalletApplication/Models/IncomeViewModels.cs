@@ -9,15 +9,15 @@ namespace eWalletApplication.Models
     {
         public int Id { get; set; }
         public double Value { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime Date { get; set; }
+        public string Notes { get; set; }
 
         // ForeignKeys
         public string UserId { get; set; }
         public int AccountId { get; set; }
         public Account Account { get; set; }
 
-        public int CatrgoryId { get; set; }
+        public int CategoryId { get; set; }
         public IncomeCategory Category { get; set; }
         
     }
