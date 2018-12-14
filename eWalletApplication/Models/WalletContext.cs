@@ -26,10 +26,7 @@ namespace eWalletApplication.Models
 
         //DbSets for TranserModel
         public DbSet<Transfer> Transfers { get; set; }
-
-        //DbSets for CurrencyModel
-        public DbSet<CurrencyIcon> CurrencyIcons { get; set; }
-        public DbSet<Currency> Currencies { get; set; }
+        
 
 
         public WalletContext() : base("name=WalletContext") {
@@ -48,6 +45,14 @@ namespace eWalletApplication.Models
             context.AccountIcons.Add(new AccountIcon { Name = "fab fa-cc-paypal" });
             context.AccountIcons.Add(new AccountIcon { Name = "fas fa-money-check-alt"});
             context.AccountIcons.Add(new AccountIcon { Name = "fab fa-cc-apple-pay" });
+
+            // SEED FOR INCOMECOTEGORYICONS
+            context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-dollar-sign" });
+            context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-coins" });
+            context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-piggy-bank" });
+            context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-gift" });
+
+
 
 
 
