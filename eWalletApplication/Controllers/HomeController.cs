@@ -14,81 +14,65 @@ namespace eWalletApplication.Controllers
 
     public class HomeController : Controller
     {
-        WalletContext db = new WalletContext();
+        public WalletContext db = new WalletContext();
 
-        private ActionResult Default() {
+        public void LoadView() {
+            string UserId = User.Identity.GetUserId();
+            var Accounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == true).ToList<Account>();
+            this.ViewBag.Accounts = Accounts;
+            var AccountIcons = db.AccountIcons;
+            ViewBag.AccountIcons = AccountIcons;
+            foreach (Account account in Accounts)
+            {
+                db.Entry(account).Reference(a => a.Icon).Load();
+            }
+
+            var DeletedAccounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == false).ToList<Account>();
+
+            ViewBag.DeletedAccounts = DeletedAccounts;
+            foreach (Account account in DeletedAccounts)
+            {
+                db.Entry(account).Reference(a => a.Icon).Load();
+            }
+
+
+        }
+
+
+        public ActionResult Index(int? accountId)
+        {
             if (Request.IsAuthenticated)
             {
-                string UserId = User.Identity.GetUserId();
-                var Accounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == true).ToList<Account>();
-                ViewBag.Accounts = Accounts;
-
-                foreach(Account account in Accounts)
+                if (accountId != null)
                 {
-                    db.Entry(account).Reference(a => a.Icon).Load();
+                    if (accountId != 0)
+                    {
+                        Account account = db.Accounts.Find(accountId);
+                        if (account != null)
+                        {
+                            db.Entry(account).Reference(a => a.Icon).Load();
+                            ViewBag.Account = account;
+                        }
+                    }
                 }
-
-                
+                LoadView();
                 return View();
             }
             else
             {
                 return RedirectToAction("Login", "Account");
             }
+
+
+
         }
-        public ActionResult Index(int? id)
-        {
-            if (id != null)
-            {
-                if (id != 0)
-                {
-                    Account account = db.Accounts.Find(id);
-                    if (account != null)
-                    {
-                        db.Entry(account).Reference(a => a.Icon).Load();
-                        ViewBag.Account = account;
-                    }
-                }
-
-            }
-
-
-            return Default();
-        }
-
-
-
-
-        public ActionResult About()
-        {
-            return Default();
-        }
-
-        public ActionResult Contact()
-        {
-            return Default();
-        }
-
-
-
+        
         public ActionResult AddAccount()
         {
             if (Request.IsAuthenticated)
             {
-                string UserId = User.Identity.GetUserId();
-                var Accounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == true).ToList<Account>();
-                var AccountIcons = db.AccountIcons;
-
-                ViewBag.Accounts = Accounts;
-                ViewBag.AccountIcons = AccountIcons;
-
-                foreach (Account account in Accounts)
-                {
-                    db.Entry(account).Reference(a => a.Icon).Load();
-                }
+                LoadView();
                 return View();
-
-
             }
             else
             {
@@ -109,9 +93,7 @@ namespace eWalletApplication.Controllers
                     {
                         account.Active = true;
                         account.UserId = User.Identity.GetUserId();
-
                         account.Icon = db.AccountIcons.Find(account.IconId);
-
 
                         db.Accounts.Add(account);
                         db.SaveChanges();
@@ -122,8 +104,9 @@ namespace eWalletApplication.Controllers
                     //Log the error (uncomment dex variable name and add a line here to write a log.)
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
-                
-                return RedirectToAction("Index", "Home");
+                ViewBag.SuccessMessage = "Account was added successfully";
+                LoadView();
+                return View("AddAccount");
 
 
             }
@@ -141,16 +124,16 @@ namespace eWalletApplication.Controllers
             if (Request.IsAuthenticated)
             {
                 Account account = db.Accounts.Find(id);
-
                 if(account.UserId.Equals(User.Identity.GetUserId()))
                 {
                     account.Active = false;
-
                     db.SaveChanges();
                 }
-                
 
-                return RedirectToAction("Index", "Home");
+                ViewBag.SuccessMessage = "Account was deleted successfully";
+
+                LoadView();
+                return View("Index");
 
 
             }
@@ -171,28 +154,15 @@ namespace eWalletApplication.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 Account Account = db.Accounts.Find(id);
-                string UserId = User.Identity.GetUserId();
-                var Accounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == true).ToList<Account>();
-                var AccountIcons = db.AccountIcons;
-                db.Entry(Account).Reference(a => a.Icon).Load();
                 ViewBag.Account = Account;
-                ViewBag.Accounts = Accounts;
-                ViewBag.AccountIcons = AccountIcons;
 
-                foreach (Account account in Accounts)
-                {
-                    db.Entry(account).Reference(a => a.Icon).Load();
-                }
                 if (Account == null)
                 {
                     return HttpNotFound();
                 }
-
                 
-                
+                LoadView();
                 return View();
-
-
             }
             else
             {
@@ -213,8 +183,8 @@ namespace eWalletApplication.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                Account Account = db.Accounts.Find(id);
-                if(TryUpdateModel(Account,"", new string[] {"Name", "IconId" }))
+                Account account = db.Accounts.Find(id);
+                if(TryUpdateModel(account,"", new string[] {"Name", "IconId" }))
                 {
                     try
                     {
@@ -227,9 +197,10 @@ namespace eWalletApplication.Controllers
                     }
                 }
 
-                
+                ViewBag.SuccessMessage = "Account was edited successfully";
 
-                return RedirectToAction("Index", "Home", new { id });
+                LoadView();
+                return View("Index");
 
 
             }
@@ -244,23 +215,7 @@ namespace eWalletApplication.Controllers
         public ActionResult Retrieve() {
             if (Request.IsAuthenticated)
             {
-                string UserId = User.Identity.GetUserId();
-                var Accounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == true).ToList<Account>();
-                var AccountIcons = db.AccountIcons;
-                var DeletedAccounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == false).ToList<Account>();
-
-                ViewBag.Accounts = Accounts;
-                ViewBag.AccountIcons = AccountIcons;
-                ViewBag.DeletedAccounts = DeletedAccounts;
-
-                foreach (Account account in Accounts)
-                {
-                    db.Entry(account).Reference(a => a.Icon).Load();
-                }
-                foreach (Account account in DeletedAccounts)
-                {
-                    db.Entry(account).Reference(a => a.Icon).Load();
-                }
+                LoadView();
                 return View();
             }
             else
@@ -275,17 +230,19 @@ namespace eWalletApplication.Controllers
         {
             if (Request.IsAuthenticated)
             {
-                Account Account = db.Accounts.Find(id);
-                if (Account != null)
+                Account account = db.Accounts.Find(id);
+                if (account != null)
                 {
-                    Account.Active = true;
+                    account.Active = true;
                     db.SaveChanges();
                 }
                 else
                 {
                     return HttpNotFound();
                 }
-                return RedirectToAction("Retrieve", "Home");
+                ViewBag.SuccessMessage = "Account was retieved successfully";
+                LoadView();
+                return View("Retrieve");
             }
             else
             {

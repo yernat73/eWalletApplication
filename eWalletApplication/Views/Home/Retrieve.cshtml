@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<eWalletApplication.Models.Account>
 
 @{
-    ViewBag.Title = "Retrieve";
+    ViewBag.Title = "Retrieve Account";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 
@@ -32,7 +32,7 @@
 @foreach (var item in ViewBag.DeletedAccounts) {
     <tr>
         <td>
-            <i class="@item.Icon.Name">
+            <i class="@item.Icon.Name"> </i>
         </td>
         <td>
             @item.Name

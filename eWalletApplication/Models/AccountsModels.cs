@@ -12,6 +12,9 @@ namespace eWalletApplication.Models
         public double Balance { get; set; }
         public bool Active { get; set; }
 
+        public ICollection<Income> Income { get; set; }
+        public ICollection<Outcome> Outcome { get; set; }
+
         // ForeignKeys
         public int IconId { get; set; }
         public AccountIcon Icon { get; set; }

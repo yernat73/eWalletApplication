@@ -192,13 +192,13 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IncomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountsModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\CurrencyModel.cs" />
     <Compile Include="Models\IncomeViewModels.cs" />
     <Compile Include="Models\OutcomeViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -532,6 +532,7 @@
     <Content Include="Views\Home\AddAccount.cshtml" />
     <Content Include="Views\Home\EditAccount.cshtml" />
     <Content Include="Views\Home\Retrieve.cshtml" />
+    <Content Include="Views\Income\AddIncomeCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
