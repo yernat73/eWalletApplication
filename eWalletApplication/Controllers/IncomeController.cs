@@ -17,14 +17,22 @@ namespace eWalletApplication.Controllers
         {
             string UserId = User.Identity.GetUserId();
             var Accounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == true).ToList<Account>();
-
+            var IncomeCategories = db.IncomeCategories.Where(c => c.UserId == UserId).ToList<IncomeCategory>();
             var IncomeCategoryIcons = db.IncomeCategoryIcons;
+
+            foreach (IncomeCategory category in IncomeCategories) {
+                db.Entry(category).Reference(c => c.Icon).Load();
+            }
             foreach (Account account in Accounts)
             {
                 db.Entry(account).Reference(a => a.Icon).Load();
             }
-            ViewBag.Accounts = Accounts;
 
+
+
+
+            ViewBag.Accounts = Accounts;
+            ViewBag.IncomeCategories = IncomeCategories;
             ViewBag.IncomeCategoryIcons = IncomeCategoryIcons;
 
 
@@ -49,6 +57,26 @@ namespace eWalletApplication.Controllers
 
             
         }
+        public ActionResult AddIncome()
+        {
+            if (Request.IsAuthenticated)
+            {
+
+                LoadView();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+
+        }
+
+
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -75,7 +103,44 @@ namespace eWalletApplication.Controllers
                 }
                 ViewBag.SuccessMessage = "Income Category was added successfully";
                 LoadView();
-                return View("AddIncomeCategory");
+                return View("AddIncome");
+
+
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddIncome([Bind(Include = "Id, Value, Notes, AccountId, CategoryId")]Income income)
+        {
+            if (Request.IsAuthenticated)
+            {
+                try
+                {
+                    if (ModelState.IsValid)
+                    {
+                        income.UserId = User.Identity.GetUserId();
+                        income.Date =  DateTime.Today;
+                        Account account = db.Accounts.Find(income.AccountId);
+                        account.Balance += income.Value; 
+                        
+                        db.Incomes.Add(income);
+                        db.SaveChanges();
+                    }
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+                ViewBag.SuccessMessage = "Income was added successfully";
+                LoadView();
+                return View("AddIncome");
 
 
             }

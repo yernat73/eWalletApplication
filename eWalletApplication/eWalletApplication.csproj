@@ -194,6 +194,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IncomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OutcomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -533,9 +534,11 @@
     <Content Include="Views\Home\EditAccount.cshtml" />
     <Content Include="Views\Home\Retrieve.cshtml" />
     <Content Include="Views\Income\AddIncomeCategory.cshtml" />
+    <Content Include="Views\Income\AddIncome.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Outcome\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
