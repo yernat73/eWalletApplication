@@ -10,26 +10,27 @@
     .plus {
         display:block;
         font-size:xx-large;
-        padding: 25px;
-        width: 100px;
-        height: 100px;
+        padding: 15px;
+        width: 80px;
+        height: 80px;
         z-index: 1000;
     }
 
     .minus {
         display: block;
         font-size: xx-large;
-        padding: 25px;
-        width: 100px;
-        height: 100px;
+        padding: 15px;
+        width: 80px;
+        height: 80px;
         z-index: 1000;
+
     }
 </style>
 
-<div class="sticky-top mx-5">
+<div class="sticky-top mx-auto">
     <div class="row">
-        <div class="col-9">
-            <a href="#" class="btn btn-success rounded-circle plus shadow" role="button"><i class="fas fa-plus"></i></a>
+        <div class="col">
+            <a href="/Income/AddIncome" class="btn btn-success rounded-circle plus shadow" role="button"><i class="fas fa-plus"></i></a>
         </div>
         <div class="col">
             <a href="#" class="btn btn-danger rounded-circle minus shadow" role="button"><i class="fas fa-minus"></i></a>
@@ -39,8 +40,7 @@
 </div>
 
 
-
-<div class="container p-4 m-0">
+<div class="container p-4 mx-auto">
 
     @if (Account != null)
     {
@@ -62,16 +62,19 @@
 
     <!-- /.row -->
     <div class="row my-3">
-        <h1 class="lead"><i class="fas fa-chart-area"></i> Dashboard</h1>
+        <div>
+            <h1 class="lead"><i class="fas fa-chart-area"></i> Dashboard</h1>
+        </div>
+        
         <hr class="shadow my-3" />
-        <div class="col-lg-12">
+        <div class="col">
             <div class="panel panel-default">
                 <div class="panel-heading">
 
 
                 </div>
                 <!-- /.panel-heading -->
-                <div class="panel-body">
+                <div class="panel-body mt-5">
                     <div id="morris-area-chart"></div>
                 </div>
                 <!-- /.panel-body -->
@@ -81,9 +84,11 @@
     <hr class="shadow my-3" />
 
     <div class="row my-3">
-        <h1 class="lead"><i class="fas fa-table"></i> Table</h1>
-        <hr class="shadow my-3" />
-        <div class="col-lg-12 p-3">
+        <div>
+            <h1 class="lead"><i class="fas fa-table"></i> Table</h1>
+        </div>
+        <hr class="shadow" />
+        <div class="col p-3 mt-5">
             <div class="panel panel-default">
                 <div class="panel-heading">
                 </div>
