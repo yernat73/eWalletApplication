@@ -535,10 +535,11 @@
     <Content Include="Views\Home\Retrieve.cshtml" />
     <Content Include="Views\Income\AddIncomeCategory.cshtml" />
     <Content Include="Views\Income\AddIncome.cshtml" />
+    <Content Include="Views\Outcome\AddOutcomeCategory.cshtml" />
+    <Content Include="Views\Outcome\AddOutcome.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Outcome\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

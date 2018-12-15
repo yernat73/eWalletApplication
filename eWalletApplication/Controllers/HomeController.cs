@@ -38,13 +38,63 @@ namespace eWalletApplication.Controllers
 
         }
 
+        public ActionResult MorrisData()
+        {
+            Stack<string> stack = new Stack<string>();
+
+            var data = "$(function() { Morris.Area({element: 'morris-area-chart',data: [";
+            string UserId = User.Identity.GetUserId();
+            DateTime today = DateTime.Today;
+
+            DateTime start = new DateTime(today.Year, today.Month, 1);
+            DateTime end = start.AddMonths(1);
+            while (true)
+            {
+                string tmp = "";
+                double income = 0;
+                double outcome = 0;
+                var Incomes = db.Incomes.Where(i => i.UserId == UserId).Where(i => i.Date >= start && i.Date < end).ToList();
+                var Outcomes = db.Outcomes.Where(i => i.UserId == UserId).Where(i => i.Date >= start && i.Date < end).ToList();
+                if(Incomes.Count == 0 || Outcomes.Count == 0)
+                {
+                    break;
+                }
+                foreach(Income i in Incomes)
+                {
+                    income += i.Value;
+                }
+                foreach (Outcome o in Outcomes)
+                {
+                    outcome += o.Value;
+                }
+                stack.Push("{Period: "+start.Year+"/"+start.Month+", Income: "+income+", Outcome: "+outcome+"},");
+
+                start.AddMonths(-1);
+                end.AddMonths(-1);
+
+
+            }
+            while (stack.Peek() != null)
+            {
+                data += stack.Pop();
+            }
+            data += "], xkey: 'Period', ykeys: ['Income', 'Outcome'], labels: ['Income', 'Outcome'], pointSize: 2, hideHover: 'auto', resize: true }); });";
+            
+
+
+            return JavaScript(data);
+        } 
+
+
 
         public ActionResult Index(int? id)
         {
             if (Request.IsAuthenticated)
             {
+                string UserId = User.Identity.GetUserId();
                 if (id != null)
                 {
+                    
                     if (id != 0)
                     {
                         Account Account = db.Accounts.Find(id);
@@ -52,12 +102,61 @@ namespace eWalletApplication.Controllers
                         {
                             db.Entry(Account).Reference(a => a.Icon).Load();
                             ViewBag.Account = Account;
+                            var Incomes = db.Incomes.Where(i => i.UserId == UserId).Where(i => i.AccountId == id).ToList<Income>();
+                            foreach (Income income in Incomes)
+                            {
+                                db.Entry(income).Reference(i => i.Category).Load();
+                                db.Entry(income.Category).Reference(c => c.Icon).Load();
+                            }
+                            var Outcomes = db.Outcomes.Where(i => i.UserId == UserId).Where(i => i.AccountId == id).ToList<Outcome>();
+                            foreach (Outcome outcome in Outcomes)
+                            {
+                                db.Entry(outcome).Reference(o => o.Category).Load();
+                                db.Entry(outcome.Category).Reference(c => c.Icon).Load();
+                            }
+                            ViewBag.Incomes = Incomes;
+                            ViewBag.Outcomes = Outcomes;
                         }
                         else
                         {
                             ViewBag.ErrorMessage = "Account not Found";
                         }
                     }
+                    else
+                    {
+                        var Incomes = db.Incomes.Where(i => i.UserId == UserId).ToList<Income>();
+                        foreach (Income income in Incomes)
+                        {
+                            db.Entry(income).Reference(i => i.Category).Load();
+                            db.Entry(income.Category).Reference(c => c.Icon).Load();
+                        }
+                        var Outcomes = db.Outcomes.Where(i => i.UserId == UserId).ToList<Outcome>();
+                        foreach (Outcome outcome in Outcomes)
+                        {
+                            db.Entry(outcome).Reference(o => o.Category).Load();
+                            db.Entry(outcome.Category).Reference(c => c.Icon).Load();
+                        }
+                        ViewBag.Incomes = Incomes;
+                        ViewBag.Outcomes = Outcomes;
+                    }
+
+                }
+                else
+                {
+                    var Incomes = db.Incomes.Where(i => i.UserId == UserId).ToList<Income>();
+                    foreach (Income income in Incomes)
+                    {
+                        db.Entry(income).Reference(i => i.Category).Load();
+                        db.Entry(income.Category).Reference(c => c.Icon).Load();
+                    }
+                    var Outcomes = db.Outcomes.Where(i => i.UserId == UserId).ToList<Outcome>();
+                    foreach (Outcome outcome in Outcomes)
+                    {
+                        db.Entry(outcome).Reference(o => o.Category).Load();
+                        db.Entry(outcome.Category).Reference(c => c.Icon).Load();
+                    }
+                    ViewBag.Incomes = Incomes;
+                    ViewBag.Outcomes = Outcomes;
                 }
                 LoadView();
                 return View();

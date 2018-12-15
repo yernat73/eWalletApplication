@@ -46,11 +46,34 @@ namespace eWalletApplication.Models
             context.AccountIcons.Add(new AccountIcon { Name = "fas fa-money-check-alt"});
             context.AccountIcons.Add(new AccountIcon { Name = "fab fa-cc-apple-pay" });
 
-            // SEED FOR INCOMECOTEGORYICONS
+            // SEED FOR INCOMECATEGORYICONS
             context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-dollar-sign" });
             context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-coins" });
             context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-piggy-bank" });
             context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-gift" });
+            context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-handshake" });
+
+            // SEED FOR OUTCOMECATEGORIES
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-car" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-tshirt" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-phone-volume" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-mobile-alt" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-utensils" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-cocktail" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-gift" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-briefcase-medical" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-home" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-paw" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-cat" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-dog" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-taxi" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-plane-departure"});
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-mountain" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-music" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-film" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-smoking" });
+            context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-venus-mars" });
+
 
 
 
