@@ -1,0 +1,122 @@
+﻿@model eWalletApplication.Models.Outcome
+
+@{
+    ViewBag.Title = "AddOutcome";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var OutcomeCategories = ViewBag.OutcomeCategories;
+    var Accounts = ViewBag.Accounts;
+}
+
+
+
+@using (Html.BeginForm("AddOutcome", "Outcome", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="p-4">
+        <h4 class="lead"><i class="fas fa-dollar-sign"></i> Add Outcome</h4>
+        <hr class="shadow my-3" />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="">
+            <div class="row mb-4">
+                <h6 class="lead m-3"><i class="far fa-credit-card"></i> Select Account:</h6>
+                @if (Accounts != null)
+                {
+
+                    foreach (var a in Accounts)
+                    {
+                        <div class="col m-2 p-0">
+                            <a href="#" data-val="@a.Id" id="icon-@a.Id" class="btn btn-outline-dark select-account" style="font-size:xx-large" role="button">
+                                <i class='@a.Icon.Name'></i>
+
+                            </a>
+                            <p class="text-sm">@a.Name</p>
+                        </div>
+                    }
+                    <div class="col m-2 p-0">
+                        <a href="/Home/AddAccount" class="btn btn-outline-success" style="font-size:xx-large" role="button">
+                            <i class='fas fa-plus-circle'></i>
+                        </a>
+                    </div>
+                    <select name="AccountId" id="accounts" style="display:none">
+
+                        @foreach (var a in Accounts)
+                        {
+                            <option value="@a.Id"></option>
+
+                        }
+
+
+                    </select>
+
+                    <script>
+                        $('.select-account').click(function () {
+                            $('#account').val($(this).data('val')).trigger('change');
+                        })
+                    </script>
+                }
+
+            </div>
+
+            <div class="row mb-4">
+                <h6 class="lead m-3"><i class="far fa-bookmark"></i> Select Category:</h6>
+                @if (OutcomeCategories != null)
+                {
+
+                    foreach (var c in OutcomeCategories)
+                    {
+                        <div class="col m-2 p-0">
+                            <a href="#" data-val="@c.Id" id="icon-@c.Id" class="btn btn-outline-dark select-category" style="font-size:xx-large" role="button">
+                                <i class='@c.Icon.Name'></i>
+
+                            </a>
+                            <p class="text-sm">@c.Name</p>
+                        </div>
+                    }
+                    <div class="col m-2 p-0">
+                        <a href="/Outcome/AddOutcomeCategory" class="btn btn-outline-success" style="font-size:xx-large" role="button">
+                            <i class='fas fa-plus-circle'></i>
+                        </a>
+                    </div>
+                    <select name="CategoryId" id="categories" style="display:none">
+
+                        @foreach (var c in OutcomeCategories)
+                        {
+                            <option value="@c.Id"></option>
+
+                        }
+
+
+                    </select>
+
+                    <script>
+                        $('.select-category').click(function () {
+                            $('#category').val($(this).data('val')).trigger('change');
+                        })
+                    </script>
+                }
+
+            </div>
+
+            <div class="form-group">
+                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control form-control-lg", placeholder = "Value" } })
+                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control", placeholder = "Notes" } })
+                @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+
+            </div>
+
+
+
+            <input type="submit" value="Add" class="btn btn-info" />
+        </div>
+
+    </div>
+
+}
+
