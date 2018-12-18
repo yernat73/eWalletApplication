@@ -16,7 +16,7 @@ namespace eWalletApplication.Controllers
     {
         public WalletContext db = new WalletContext();
 
-        public void LoadView() {
+        private void LoadView() {
             string UserId = User.Identity.GetUserId();
             var Accounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == true).ToList<Account>();
             ViewBag.Accounts = Accounts;
@@ -34,6 +34,17 @@ namespace eWalletApplication.Controllers
             {
                 db.Entry(account).Reference(a => a.Icon).Load();
             }
+            var IncomeCategories = db.IncomeCategories.Where(c => c.UserId == UserId).Where(c => c.Active == true).ToList<IncomeCategory>();
+            var OutcomeCategories = db.OutcomeCategories.Where(c => c.UserId == UserId).Where(c => c.Active == true).ToList<OutcomeCategory>();
+            foreach(IncomeCategory incomeCategory in IncomeCategories) {
+                db.Entry(incomeCategory).Reference(c => c.Icon).Load();
+            }
+            foreach (OutcomeCategory outcomeCategory in OutcomeCategories)
+            {
+                db.Entry(outcomeCategory).Reference(c => c.Icon).Load();
+            }
+            ViewBag.IncomeCategories = IncomeCategories;
+            ViewBag.OutcomeCategories = OutcomeCategories;
 
 
         }
@@ -87,77 +98,48 @@ namespace eWalletApplication.Controllers
 
 
 
-        public ActionResult Index(int? id)
+        public ActionResult Index(int id)
         {
             if (Request.IsAuthenticated)
             {
                 string UserId = User.Identity.GetUserId();
-                if (id != null)
+                Account account = null;
+                List<Income> Incomes;
+                List<Outcome> Outcomes;
+                if(id != 0)
                 {
-                    
-                    if (id != 0)
+                    Incomes = db.Incomes.Where(i => i.UserId == UserId).Where(i => i.AccountId == id).ToList<Income>();
+                    Outcomes = db.Outcomes.Where(i => i.UserId == UserId).Where(i => i.AccountId == id).ToList<Outcome>();
+                    account = db.Accounts.Find(id);
+                    if(account.UserId != UserId)
                     {
-                        Account Account = db.Accounts.Find(id);
-                        if (Account != null)
-                        {
-                            db.Entry(Account).Reference(a => a.Icon).Load();
-                            ViewBag.Account = Account;
-                            var Incomes = db.Incomes.Where(i => i.UserId == UserId).Where(i => i.AccountId == id).ToList<Income>();
-                            foreach (Income income in Incomes)
-                            {
-                                db.Entry(income).Reference(i => i.Category).Load();
-                                db.Entry(income.Category).Reference(c => c.Icon).Load();
-                            }
-                            var Outcomes = db.Outcomes.Where(i => i.UserId == UserId).Where(i => i.AccountId == id).ToList<Outcome>();
-                            foreach (Outcome outcome in Outcomes)
-                            {
-                                db.Entry(outcome).Reference(o => o.Category).Load();
-                                db.Entry(outcome.Category).Reference(c => c.Icon).Load();
-                            }
-                            ViewBag.Incomes = Incomes;
-                            ViewBag.Outcomes = Outcomes;
-                        }
-                        else
-                        {
-                            ViewBag.ErrorMessage = "Account not Found";
-                        }
-                    }
-                    else
-                    {
-                        var Incomes = db.Incomes.Where(i => i.UserId == UserId).ToList<Income>();
-                        foreach (Income income in Incomes)
-                        {
-                            db.Entry(income).Reference(i => i.Category).Load();
-                            db.Entry(income.Category).Reference(c => c.Icon).Load();
-                        }
-                        var Outcomes = db.Outcomes.Where(i => i.UserId == UserId).ToList<Outcome>();
-                        foreach (Outcome outcome in Outcomes)
-                        {
-                            db.Entry(outcome).Reference(o => o.Category).Load();
-                            db.Entry(outcome.Category).Reference(c => c.Icon).Load();
-                        }
-                        ViewBag.Incomes = Incomes;
-                        ViewBag.Outcomes = Outcomes;
+                        account = null;
                     }
 
                 }
                 else
                 {
-                    var Incomes = db.Incomes.Where(i => i.UserId == UserId).ToList<Income>();
-                    foreach (Income income in Incomes)
-                    {
-                        db.Entry(income).Reference(i => i.Category).Load();
-                        db.Entry(income.Category).Reference(c => c.Icon).Load();
-                    }
-                    var Outcomes = db.Outcomes.Where(i => i.UserId == UserId).ToList<Outcome>();
-                    foreach (Outcome outcome in Outcomes)
-                    {
-                        db.Entry(outcome).Reference(o => o.Category).Load();
-                        db.Entry(outcome.Category).Reference(c => c.Icon).Load();
-                    }
-                    ViewBag.Incomes = Incomes;
-                    ViewBag.Outcomes = Outcomes;
+                    Incomes = db.Incomes.Where(i => i.UserId == UserId).ToList<Income>();
+                    Outcomes = db.Outcomes.Where(i => i.UserId == UserId).ToList<Outcome>();
                 }
+
+                
+
+
+                foreach (Income income in Incomes)
+                {
+                    db.Entry(income).Reference(i => i.Category).Load();
+                    db.Entry(income.Category).Reference(c => c.Icon).Load();
+                }
+               
+                foreach (Outcome outcome in Outcomes)
+                {
+                    db.Entry(outcome).Reference(o => o.Category).Load();
+                    db.Entry(outcome.Category).Reference(c => c.Icon).Load();
+                }
+                ViewBag.Incomes = Incomes;
+                ViewBag.Outcomes = Outcomes;
+                ViewBag.Account = account;
                 LoadView();
                 return View();
             }

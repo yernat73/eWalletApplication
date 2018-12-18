@@ -10,11 +10,8 @@
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <!-- MetisMenu CSS -->
-    <link href="/Vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
     <!-- Custom CSS -->
 
-    <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
     <!-- Morris Charts CSS -->
     <link href="/Vendor/morrisjs/morris.css" rel="stylesheet">
     <!-- Custom Fonts -->
@@ -24,6 +21,8 @@
     @{ 
         string successMessage = ViewBag.SuccessMessage;
         string errorMessage = ViewBag.ErrorMessage;
+        var IncomeCategories = ViewBag.Incomecategories;
+        var OutcomeCategories = ViewBag.Outcomecategories;
 
     }
 
@@ -34,7 +33,7 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar Holder -->
-        <nav id="sidebar" class="">
+        <nav id="sidebar" class="" style="opacity: 0.9">
             <div class="sidebar-header">
                 <a href="http://localhost:58194">
                     <img src="~/Images/logo_light_1.png" class="img-fluid" />
@@ -56,13 +55,7 @@
                             foreach (var a in ViewBag.Accounts)
                             {
                                 <li>
-                                    
-                                    <form action="/Home/DeleteAccount" method="post" class="form-inline" id="account-delete-form-@a.Id">
-                                        <input value="@a.Id" name="Id" style="display:none" />
-                                        <a href="/Home/Index/@a.Id" class="col-8"><i class="@a.Icon.Name"></i> @a.Name </a>
-                                        <a href="/Home/EditAccount/@a.Id" class="col-2 px-3"><i class="fas fa-pen"></i></a>
-                                        <a href="#" class="col-2 px-3" onclick="document.getElementById('account-delete-form-@a.Id').submit();"><i class="fas fa-times"></i></a>
-                                    </form>
+                                    <a href="/Home/Index/@a.Id"><i class="@a.Icon.Name"></i> @a.Name </a>
                                     
                                 </li>
                             }
@@ -81,15 +74,38 @@
                     <div class="dropdown">
                         <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-book"></i> Categories</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li>
-                                <a href="#">Food</a>
+                            <li class="">
+                                <div class="row m-0">
+                                    <a href="#" class="col-8">Income</a>
+                                    <a href="/Income/AddIncomeCategory" class="text-center col"><i class="fas fa-plus"></i></a>
+                                    
+                                </div>
                             </li>
-                            <li>
-                                <a href="#">Roads</a>
+                            @if (IncomeCategories != null)
+                            {
+                                foreach (IncomeCategory category in IncomeCategories)
+                                {
+                                    <li>
+                                        <a href="/Income/EditIncomeCategory/@category.Id" ><i class="@category.Icon.Name ml-3"></i> @category.Name</a>
+                                    </li>
+                                }
+                            }
+                            <li class="">
+                                <div class="row m-0">
+                                    <a href="#" class="col-8">Outcome</a>
+                                    <a href="/Outcome/AddOutcomeCategory" class="text-center col"><i class="fas fa-plus"></i></a>
+                                   
+                                </div>
                             </li>
-                            <li>
-                                <a href="#">Housing</a>
-                            </li>
+                            @if (OutcomeCategories != null)
+                            {
+                                foreach (OutcomeCategory category in OutcomeCategories)
+                                {
+                                    <li>
+                                        <a href="/Outcome/EditOutcomeCategory/@category.Id" class=""><i class="@category.Icon.Name ml-3"></i> @category.Name</a>
+                                    </li>
+                                }
+                            }
                         </ul>
 
                     </div>
@@ -126,12 +142,29 @@
                             <span></span>
                             <span></span>
                         </button>
-                        <div class="position-absolute" style="right:10%">
-                            <a href="/Income/AddIncome" class="btn btn-success rounded-circle shadow mx-2" role="button" style="font-size:large"><i class="fas fa-plus"></i></a>
-                            <a href="/Outcome/AddOutcome" class="btn btn-danger rounded-circle shadow mx-2" role="button" style="font-size:large"><i class="fas fa-minus"></i></a>
+                        <button class="btn btn-light d-inline-block d-md-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fas fa-align-justify"></i>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                            <ul class="nav navbar-nav ml-auto">
+
+                                <li class="nav-item mx-3">
+                                    <a href="/Income/AddIncome" class="lead text-success" style="font-size:large"><i class="fas fa-plus"></i></a>
+                                </li>
+                                <li class="nav-item mx-3">
+                                    <a href="/Outcome/AddOutcome" class="lead text-danger " style="font-size:large"><i class="fas fa-minus"></i></a>
+                                </li>
+                                <li class="nav-item mx-3">
+                                    <a href="#" title="Make tranfer" class="lead text-muted mr-3"><i class="fas fa-exchange-alt"></i></a>
+                                </li>
+                            </ul>
                         </div>
-                        
-                        <a href="#" title="Make tranfer" class="lead text-muted mr-3"><i class="fas fa-exchange-alt"></i></a>
+
+
+
+
+
 
                     </div>
                 </nav>
@@ -181,7 +214,7 @@
         <script src="/Vendor/raphael/raphael.min.js"></script>
 
         <script src="/Vendor/morrisjs/morris.min.js"></script>
-        <script src="/data/morris-data.js"></script>
+        <script src="/Home/MorrisData></script>
         <!-- Custom Theme JavaScript -->
         <script src="/dist/js/sb-admin-2.js"></script>
 
@@ -205,7 +238,9 @@
                 $('#dataTable').DataTable();
 
             });
-            
+            $('tr[data-href]').on("click", function () {
+                document.location = $(this).data('href');
+            });
         </script>
 
 </body>

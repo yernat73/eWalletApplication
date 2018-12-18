@@ -537,6 +537,10 @@
     <Content Include="Views\Income\AddIncome.cshtml" />
     <Content Include="Views\Outcome\AddOutcomeCategory.cshtml" />
     <Content Include="Views\Outcome\AddOutcome.cshtml" />
+    <Content Include="Views\Income\EditIncomeCategory.cshtml" />
+    <Content Include="Views\Income\EditIncome.cshtml" />
+    <Content Include="Views\Outcome\EditOutcome.cshtml" />
+    <Content Include="Views\Outcome\EditOutcomeCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
