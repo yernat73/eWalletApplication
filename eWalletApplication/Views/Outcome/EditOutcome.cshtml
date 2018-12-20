@@ -1,25 +1,45 @@
-﻿@model eWalletApplication.Models.Income
+﻿@model eWalletApplication.Models.Outcome
 
 @{
-    ViewBag.Title = "AddIncome";
+    ViewBag.Title = "Edit Outcome";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var IncomeCategories = ViewBag.IncomeCategories;
+    var OutcomeCategories = ViewBag.OutcomeCategories;
     var Accounts = ViewBag.Accounts;
+    var Outcome = ViewBag.Outcome;
 }
 
 
 
-@using (Html.BeginForm("AddIncome", "Income", FormMethod.Post))
+@using (Html.BeginForm("EditOutcome", "Outcome", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
 <div class="p-4">
-    <h4 class="lead"><i class="fas fa-dollar-sign"></i> Add Income</h4>
+    
+    <div>
+        <form action="/Outcome/DeleteOutcome" method="post" class="" id="account-delete-form">
+            <div class="row">
+                <div class="col">
+                    <h4 class="lead">
+                        <i class="far fa-bookmark"></i> Edit Outcome
+                    </h4>
+                </div>
+                <div class="col-2">
+                    <a href="#" class="col text-danger" onclick="document.getElementById('account-delete-form').submit();"><i class="fas fa-trash"></i></a>
+                    <input value="@Outcome.Id" name="Id" style="display:none" />
+                </div>
+
+            </div>
+
+
+        </form>
+    </div>
     <hr class="shadow my-3" />
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+    <input name="Id" value="@Outcome.Id" hidden />
     <div class="">
         <h6 class="m-3"><i class="far fa-credit-card"></i> Select Account:</h6>
         <div class="row mb-4">
@@ -65,10 +85,10 @@
         <h6 class="m-3"><i class="far fa-bookmark"></i> Select Category:</h6>
         <div class="row mb-4">
 
-            @if (IncomeCategories != null)
+            @if (OutcomeCategories != null)
             {
 
-                foreach (var c in IncomeCategories)
+                foreach (var c in OutcomeCategories)
                 {
                     <div class="col m-2 p-0">
                         <a href="#" data-val="@c.Id" id="icon-@c.Id" class="btn btn-outline-dark select-category" style="font-size:xx-large" role="button">
@@ -79,13 +99,13 @@
                     </div>
                 }
                 <div class="col m-2 p-0">
-                    <a href="/Income/AddIncomeCategory" class="btn btn-outline-success" style="font-size:xx-large" role="button">
+                    <a href="/Outcome/AddOutcomeCategory" class="btn btn-outline-success" style="font-size:xx-large" role="button">
                         <i class='fas fa-plus-circle'></i>
                     </a>
                 </div>
                 <select name="CategoryId" id="categories" style="display:none">
 
-                    @foreach (var c in IncomeCategories)
+                    @foreach (var c in OutcomeCategories)
                     {
                         <option value="@c.Id"></option>
 
@@ -104,18 +124,18 @@
         </div>
 
         <div class="form-group">
-            @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control form-control-lg", placeholder = "Value" } })
+            @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @Value = Outcome.Value, @class = "form-control form-control-lg", placeholder = "Value" } })
             @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
-            @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control", placeholder = "Notes" } })
+            @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @Value = Outcome.Notes, @class = "form-control", placeholder = "Notes" } })
             @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
 
         </div>
 
 
 
-        <input type="submit" value="Add" class="btn btn-info" />
+        <input type="submit" value="Save" class="btn btn-info" />
     </div>
 
 </div>

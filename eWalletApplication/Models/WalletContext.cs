@@ -52,6 +52,7 @@ namespace eWalletApplication.Models
             context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-piggy-bank" });
             context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-gift" });
             context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-handshake" });
+            context.IncomeCategoryIcons.Add(new IncomeCategoryIcon { Name = "fas fa-exchange-alt" });
 
             // SEED FOR OUTCOMECATEGORIES
             context.OutcomeCategoryIcons.Add(new OutcomeCategoryIcon { Name = "fas fa-car" });

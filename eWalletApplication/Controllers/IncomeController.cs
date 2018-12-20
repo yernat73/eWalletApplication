@@ -13,7 +13,7 @@ namespace eWalletApplication.Controllers
     public class IncomeController : Controller
     {
         public WalletContext db = new WalletContext();
-        public void LoadView()
+        private void LoadView()
         {
             string UserId = User.Identity.GetUserId();
             var Accounts = db.Accounts.Where(a => a.UserId == UserId).Where(a => a.Active == true).ToList<Account>();
@@ -27,6 +27,14 @@ namespace eWalletApplication.Controllers
             {
                 db.Entry(account).Reference(a => a.Icon).Load();
             }
+            var OutcomeCategories = db.OutcomeCategories.Where(c => c.UserId == UserId).ToList<OutcomeCategory>();
+            
+            foreach (OutcomeCategory outcomeCategory in OutcomeCategories)
+            {
+                db.Entry(outcomeCategory).Reference(iC => iC.Icon).Load();
+            }
+            ViewBag.IncomeCategories = IncomeCategories;
+            ViewBag.OutcomeCategories = OutcomeCategories;
 
 
 
@@ -73,7 +81,54 @@ namespace eWalletApplication.Controllers
 
         }
 
+        public ActionResult EditIncomeCategory(int? id)
+        {
+            if (Request.IsAuthenticated)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                IncomeCategory Category = db.IncomeCategories.Find(id);
+                ViewBag.IncomeCategory = Category;
 
+                if (Category == null)
+                {
+                    return HttpNotFound();
+                }
+
+                LoadView();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
+        public ActionResult EditIncome(int? id) {
+            if (Request.IsAuthenticated)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Income Income = db.Incomes.Find(id);
+                ViewBag.Income = Income;
+
+                if (Income == null)
+                {
+                    return HttpNotFound();
+                }
+
+                LoadView();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
 
 
 
@@ -103,7 +158,7 @@ namespace eWalletApplication.Controllers
                 }
                 ViewBag.SuccessMessage = "Income Category was added successfully";
                 LoadView();
-                return View("AddIncome");
+                return View("AddIncomeCategory");
 
 
             }
@@ -151,6 +206,141 @@ namespace eWalletApplication.Controllers
 
 
         }
+
+        [HttpPost, ActionName("EditIncomeCategory")]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditIncomeCategoryPost(int? id)
+        {
+
+            if (Request.IsAuthenticated)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                IncomeCategory IncomeCategory = db.IncomeCategories.Find(id);
+                if (TryUpdateModel(IncomeCategory, "", new string[] { "Name", "IconId" }))
+                {
+                    try
+                    {
+                        db.SaveChanges();
+
+                    }
+                    catch (RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    }
+                }
+
+                ViewBag.SuccessMessage = "Income Category was edited successfully";
+
+                LoadView();
+                return RedirectToAction("Index", "Home", new { id = 0 });
+
+
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+
+        }
+
+        [HttpPost, ActionName("EditIncome")]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditIncomePost(int? id)
+        {
+
+            if (Request.IsAuthenticated)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Income Income = db.Incomes.Find(id);
+                if (TryUpdateModel(Income, "", new string[] { "Value", "Notes", "AccountId", "CategoryId" }))
+                {
+                    try
+                    {
+                        db.SaveChanges();
+
+                    }
+                    catch (RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    }
+                }
+
+                ViewBag.SuccessMessage = "Income was edited successfully";
+
+                LoadView();
+                return RedirectToAction("Index", "Home", new { id = 0 });
+
+
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+
+        }
+        [HttpPost]
+        public ActionResult DeleteIncome(int id)
+        {
+            if (Request.IsAuthenticated)
+            {
+                Income income = db.Incomes.Find(id);
+                Account account = db.Accounts.Find(income.AccountId);
+                if (income != null)
+                {
+                    account.Balance -= income.Value;
+                    db.Incomes.Remove(income);
+                    db.SaveChanges();
+                    ViewBag.SuccessMessage = "Income was deleted successfully";
+                }
+                
+
+                return RedirectToAction("Index", "Home", new { id = account.Id});
+
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+
+        }
+        [HttpPost]
+        public ActionResult DeleteIncomeCategory(int id)
+        {
+            if (Request.IsAuthenticated)
+            {
+                IncomeCategory category = db.IncomeCategories.Find(id);
+            
+                if (category.UserId.Equals(User.Identity.GetUserId()))
+                {
+                    category.Active = false;
+                    db.SaveChanges();
+                }
+
+                ViewBag.SuccessMessage = "Category was deleted successfully";
+
+                LoadView();
+                return RedirectToAction("Index", "Home", new { id = 0 });
+
+
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+
+        }
+
+
 
     }
 }
