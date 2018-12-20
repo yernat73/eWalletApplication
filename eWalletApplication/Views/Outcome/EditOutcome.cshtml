@@ -20,12 +20,12 @@
     <div>
         <form action="/Outcome/DeleteOutcome" method="post" class="" id="account-delete-form">
             <div class="row">
-                <div class="col-10">
+                <div class="col">
                     <h4 class="lead">
                         <i class="far fa-bookmark"></i> Edit Outcome
                     </h4>
                 </div>
-                <div class="col">
+                <div class="col-2">
                     <a href="#" class="col text-danger" onclick="document.getElementById('account-delete-form').submit();"><i class="fas fa-trash"></i></a>
                     <input value="@Outcome.Id" name="Id" style="display:none" />
                 </div>
@@ -41,8 +41,9 @@
 
     <input name="Id" value="@Outcome.Id" hidden />
     <div class="">
+        <h6 class="m-3"><i class="far fa-credit-card"></i> Select Account:</h6>
         <div class="row mb-4">
-            <h6 class="lead m-3"><i class="far fa-credit-card"></i> Select Account:</h6>
+
             @if (Accounts != null)
             {
 
@@ -81,8 +82,9 @@
 
         </div>
 
+        <h6 class="m-3"><i class="far fa-bookmark"></i> Select Category:</h6>
         <div class="row mb-4">
-            <h6 class="lead m-3"><i class="far fa-bookmark"></i> Select Category:</h6>
+
             @if (OutcomeCategories != null)
             {
 

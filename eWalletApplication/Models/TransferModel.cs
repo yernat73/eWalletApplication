@@ -13,7 +13,7 @@ namespace eWalletApplication.Models
 
 
         // ForeignKeys
-        public Account From { get; set; }
-        public Account To { get; set; }
+        public int From { get; set; }
+        public int To { get; set; }
     }
 }

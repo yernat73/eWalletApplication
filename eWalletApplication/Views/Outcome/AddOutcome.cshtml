@@ -21,8 +21,9 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="">
+            <h6 class="m-3"><i class="far fa-credit-card"></i> Select Account:</h6>
             <div class="row mb-4">
-                <h6 class="lead m-3"><i class="far fa-credit-card"></i> Select Account:</h6>
+
                 @if (Accounts != null)
                 {
 
@@ -61,8 +62,9 @@
 
             </div>
 
+            <h6 class="m-3"><i class="far fa-bookmark"></i> Select Category:</h6>
             <div class="row mb-4">
-                <h6 class="lead m-3"><i class="far fa-bookmark"></i> Select Category:</h6>
+
                 @if (OutcomeCategories != null)
                 {
 

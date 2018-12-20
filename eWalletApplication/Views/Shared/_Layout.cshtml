@@ -5,12 +5,15 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
     <title>@ViewBag.Title</title>
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <!-- Custom CSS -->
+    <!-- DataTable -->
+    <link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.dataTables.min.css" rel="stylesheet">
 
     <!-- Morris Charts CSS -->
     <link href="/Vendor/morrisjs/morris.css" rel="stylesheet">
@@ -18,7 +21,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
     @Scripts.Render("~/bundles/jquery")
-    @{ 
+    @{
         string successMessage = ViewBag.SuccessMessage;
         string errorMessage = ViewBag.ErrorMessage;
         var IncomeCategories = ViewBag.Incomecategories;
@@ -35,13 +38,13 @@
         <!-- Sidebar Holder -->
         <nav id="sidebar" class="" style="opacity: 0.9">
             <div class="sidebar-header">
-                <a href="http://localhost:58194">
+                <a href="/Home/Index/0">
                     <img src="~/Images/logo_light_1.png" class="img-fluid" />
                 </a>
             </div>
             <ul class="list-unstyled components">
                 <li>
-                    <a href="http://localhost:58194"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    <a href="/Home/Index/0"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
                 </li>
                 <li>
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-credit-card"></i> Accounts</a>
@@ -133,7 +136,7 @@
 
         </nav>
         <!-- Page Content Holder -->
-        <div id="content" class="container-fluid p-0">
+        <div id="content" class="container-fluid p-0 ">
             <header class="m-4 shadow sticky-top mt-5">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="container-fluid">
@@ -142,21 +145,19 @@
                             <span></span>
                             <span></span>
                         </button>
-                        <button class="btn btn-light d-inline-block d-md-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <i class="fas fa-align-justify"></i>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        
+                        <div>
 
-                            <ul class="nav navbar-nav ml-auto">
+                            <ul class="nav">
 
                                 <li class="nav-item mx-3">
-                                    <a href="/Income/AddIncome" class="lead text-success" style="font-size:large"><i class="fas fa-plus"></i></a>
+                                    <a href="/Income/AddIncome" class="lead text-success"><i class="fas fa-plus"></i></a>
                                 </li>
                                 <li class="nav-item mx-3">
-                                    <a href="/Outcome/AddOutcome" class="lead text-danger " style="font-size:large"><i class="fas fa-minus"></i></a>
+                                    <a href="/Outcome/AddOutcome" class="lead text-danger"><i class="fas fa-minus"></i></a>
                                 </li>
                                 <li class="nav-item mx-3">
-                                    <a href="#" title="Make tranfer" class="lead text-muted mr-3"><i class="fas fa-exchange-alt"></i></a>
+                                    <a href="#" title="Make tranfer" class="lead text-info"><i class="fas fa-exchange-alt"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -238,8 +239,8 @@
                 $('#dataTable').DataTable();
 
             });
-            $('tr[data-href]').on("click", function () {
-                document.location = $(this).data('href');
+            $(document).ready(function () {
+                $('#retrieve').DataTable();
             });
         </script>
 

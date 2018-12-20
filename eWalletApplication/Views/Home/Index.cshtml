@@ -8,7 +8,6 @@
     var Outcomes = ViewBag.Outcomes;
 }
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/af-2.3.2/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-1.5.0/sl-1.2.6/datatables.min.css" />
 
 
 
@@ -21,11 +20,13 @@
             <div class="card text-white bg-info mb-3" style="opacity: 0.75">
                 <div class="card-header">
                    
-                    <form action="/Home/DeleteAccount" method="post" class="form-inline" id="account-delete-form">
-                        <div class="col-8 ">@Account.Name</div>
+                    <form action="/Home/DeleteAccount" method="post" class="row" id="account-delete-form">
+                        <div class="col">@Account.Name</div>
+                        
+                        <div class="col-2"><a href="/Home/EditAccount/@Account.Id" ><i class="fas fa-pen"></i> </a></div>
+                        <div class="col-2"><a href="#"  onclick="document.getElementById('account-delete-form').submit();"><i class="fas fa-trash"></i></a></div>
+                        
                         <input value="@Account.Id" name="Id" style="display:none" />
-                        <a href="/Home/EditAccount/@Account.Id" class="col"><i class="fas fa-pen"></i> </a>
-                        <a href="#" class="col" onclick="document.getElementById('account-delete-form').submit();"><i class="fas fa-trash"></i></a>
                     </form>
                 </div>
                 <div class="card-body">
@@ -70,19 +71,20 @@
             <h1 class="lead"><i class="fas fa-table"></i> Table</h1>
         </div>
         <hr class="shadow" />
-        <div class="col p-3 mt-5">
+        <div class="col p-0 mt-5">
             <div class="panel panel-default">
                 <div class="panel-heading">
                 </div>
                 <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <table width="100%" class="table table-hover bg-white" id="dataTable" data-order='[[ 3, "asc" ]]'>
+                <div class="panel-body p-0">
+                    <table class="table bg-white p-0 display responsive nowrap" cellspacing="0" width="100%" id="dataTable" data-order='[[ 2, "asc" ]]'>
                         <thead>
                             <tr>
                                 <th>Category</th>
                                 <th>Value</th>
-                                <th>Notes</th>
                                 <th>Date</th>
+                                <th>Notes</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -90,22 +92,27 @@
                             {
                                 foreach (Income i in Incomes)
                                 {
-                                    <tr class="text-success" data-href="/Income/EditIncome/@i.Id" style="cursor:pointer">
-                                        <td>
-                                            <i class="@i.Category.Icon.Name"></i>
-                                            @i.Category.Name
-                                        </td>
-                                        <td class="text-center">
-                                            @i.Value
-                                        </td>
-                                        <td>
-                                            @i.Notes
-                                        </td>
-                                        <td>
-                                            @i.Date.ToString("dddd dd MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))
-                                        </td>
+                            <tr class="text-success">
+                                <td>
+                                    <i class="@i.Category.Icon.Name"></i>
+                                    @i.Category.Name
+                                  
+                                </td>
+                                <td>
+                                    <a href="/Income/EditIncome/@i.Id">
 
-                                    </tr>
+                                        @i.Value
+                                    </a>
+                                </td>
+                                <td>
+                                    @i.Date.ToString("dd MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))
+                                </td>
+                                <td  class="one">
+                                    @i.Notes
+                                </td>
+
+
+                            </tr>
 
                                 }
                             }
@@ -113,22 +120,25 @@
                             {
                                 foreach (Outcome o in Outcomes)
                                 {
-                                    <tr class="text-danger" data-href="/Outcome/EditOutcome/@o.Id" style="cursor:pointer">
-                                        <td>
-                                            <i class="@o.Category.Icon.Name"></i>
-                                            @o.Category.Name
-                                        </td>
-                                        <td class="text-center">
-                                            @o.Value
-                                        </td>
-                                        <td>
-                                            @o.Notes
-                                        </td>
-                                        <td>
-                                            @o.Date.ToString("dddd dd MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))
-                                        </td>
+                            <tr class="text-danger" data-href="/Outcome/EditOutcome/@o.Id" style="cursor:pointer">
+                                <td>
+                                    <i class="@o.Category.Icon.Name"></i>
+                                    @o.Category.Name
 
-                                    </tr>
+                                </td>
+                                <td>
+                                    <a href="/Outcome/EditOutcome/@o.Id">
+                                        @o.Value
+                                    </a>
+                                </td>
+                                <td>
+                                    @o.Date.ToString("dd MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))
+                                </td>
+                                <td class="one">
+                                    @o.Notes
+                                </td>
+
+                            </tr>
 
                                 }
                             }
