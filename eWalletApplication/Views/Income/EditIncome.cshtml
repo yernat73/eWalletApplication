@@ -9,136 +9,155 @@
     var Income = ViewBag.Income;
 }
 
+<form action="/Income/DeleteIncome" method="post" class="" id="account-delete-form">
+    <input value="@Income.Id" name="Id" style="display:none" />
+</form>
 
+    @using (Html.BeginForm("EditIncome", "Income", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm("EditIncome", "Income", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+        <div class="p-4">
 
-<div class="p-4">
-    
-    <div>
-        <form action="/Income/DeleteIncome" method="post" class="" id="account-delete-form">
-            <div class="row">
-                <div class="col">
-                    <h4 class="lead">
-                        <i class="far fa-bookmark"></i> Edit Income
-                    </h4>
+            <div>
+
+                <div class="row">
+                    <div class="col">
+                        <h4 class="lead">
+                            <i class="far fa-bookmark"></i> Edit Income
+                        </h4>
+                    </div>
+                    <div class="col-2">
+                        <a href="#" class="col text-danger" onclick="document.getElementById('account-delete-form').submit();"><i class="fas fa-trash"></i></a>
+                        
+                    </div>
+
                 </div>
-                <div class="col-2">
-                    <a href="#" class="col text-danger" onclick="document.getElementById('account-delete-form').submit();"><i class="fas fa-trash"></i></a>
-                    <input value="@Income.Id" name="Id" style="display:none" />
-                </div>
+
+
+            </div>
+            <hr class="shadow my-3" />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <input name="Id" value="@Income.Id" hidden />
+        <div class="">
+            <h6 class="m-3"><i class="far fa-credit-card"></i> Select Account:</h6>
+            <div class="row mb-4">
+
+                @if (Accounts != null)
+                {
+
+                    foreach (var a in Accounts)
+                    {
+                        <div class="col m-2 p-0">
+                            <a href="#" data-val="@a.Id" id="icon-@a.Id" class="btn btn-outline-dark select-account" style="font-size:xx-large" role="button">
+                                <i class='@a.Icon.Name'></i>
+
+                            </a>
+                            <p class="text-sm">@a.Name</p>
+                        </div>
+                    }
+                    <div class="col m-2 p-0">
+                        <a href="/Home/AddAccount" class="btn btn-outline-success" style="font-size:xx-large" role="button">
+                            <i class='fas fa-plus-circle'></i>
+                        </a>
+                    </div>
+                    <select name="AccountId" id="account" style="display:none">
+
+                        @foreach (var a in Accounts)
+                        {
+                            if (a.Id == Income.AccountId)
+                            {
+                                <option value="@a.Id" selected></option>
+
+                            }
+                            else
+                            {
+                                <option value="@a.Id"></option>
+                            }
+
+
+
+                        }
+
+
+                    </select>
+
+                    <script>
+                        $('.select-account').click(function () {
+                            $('#account').val($(this).data('val')).trigger('change');
+                        })
+                    </script>
+                }
+
+            </div>
+
+            <h6 class="m-3"><i class="far fa-bookmark"></i> Select Category:</h6>
+            <div class="row mb-4">
+
+                @if (IncomeCategories != null)
+                {
+
+                    foreach (var c in IncomeCategories)
+                    {
+                        <div class="col m-2 p-0">
+                            <a href="#" data-val="@c.Id" id="icon-@c.Id" class="btn btn-outline-dark select-category" style="font-size:xx-large" role="button">
+                                <i class='@c.Icon.Name'></i>
+
+                            </a>
+                            <p class="text-sm">@c.Name</p>
+                        </div>
+                    }
+                    <div class="col m-2 p-0">
+                        <a href="/Income/AddIncomeCategory" class="btn btn-outline-success" style="font-size:xx-large" role="button">
+                            <i class='fas fa-plus-circle'></i>
+                        </a>
+                    </div>
+                    <select name="CategoryId" id="category" style="display:none">
+
+                        @foreach (var c in IncomeCategories)
+                        {
+                            if (c.Id == Income.CategoryId)
+                            {
+
+                                <option value="@c.Id" selected></option>
+                            }
+                            else
+                            {
+                                <option value="@c.Id"></option>
+                            }
+
+                        }
+
+
+                    </select>
+
+                    <script>
+                        $('.select-category').click(function () {
+                            $('#category').val($(this).data('val')).trigger('change');
+                        })
+                    </script>
+                }
+
+            </div>
+
+            <div class="form-group">
+                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @Value = Income.Value, @class = "form-control form-control-lg", placeholder = "Value" } })
+                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @Value = Income.Notes, @class = "form-control", placeholder = "Notes" } })
+                @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
 
             </div>
 
 
-        </form>
+
+            <input type="submit" value="Save" class="btn btn-info" />
+        </div>
+
     </div>
-    <hr class="shadow my-3" />
-
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-    <input name="Id" value="@Income.Id" hidden />
-    <div class="">
-        <h6 class="m-3"><i class="far fa-credit-card"></i> Select Account:</h6>
-        <div class="row mb-4">
-
-            @if (Accounts != null)
-            {
-
-                foreach (var a in Accounts)
-                {
-                    <div class="col m-2 p-0">
-                        <a href="#" data-val="@a.Id" id="icon-@a.Id" class="btn btn-outline-dark select-account" style="font-size:xx-large" role="button">
-                            <i class='@a.Icon.Name'></i>
-
-                        </a>
-                        <p class="text-sm">@a.Name</p>
-                    </div>
-                }
-                <div class="col m-2 p-0">
-                    <a href="/Home/AddAccount" class="btn btn-outline-success" style="font-size:xx-large" role="button">
-                        <i class='fas fa-plus-circle'></i>
-                    </a>
-                </div>
-                <select name="AccountId" id="accounts" style="display:none">
-
-                    @foreach (var a in Accounts)
-                    {
-                        <option value="@a.Id"></option>
-
-                    }
-
-
-                </select>
-
-                <script>
-                    $('.select-account').click(function () {
-                        $('#account').val($(this).data('val')).trigger('change');
-                    })
-                </script>
-            }
-
-        </div>
-
-        <h6 class="m-3"><i class="far fa-bookmark"></i> Select Category:</h6>
-        <div class="row mb-4">
-
-            @if (IncomeCategories != null)
-            {
-
-                foreach (var c in IncomeCategories)
-                {
-                    <div class="col m-2 p-0">
-                        <a href="#" data-val="@c.Id" id="icon-@c.Id" class="btn btn-outline-dark select-category" style="font-size:xx-large" role="button">
-                            <i class='@c.Icon.Name'></i>
-
-                        </a>
-                        <p class="text-sm">@c.Name</p>
-                    </div>
-                }
-                <div class="col m-2 p-0">
-                    <a href="/Income/AddIncomeCategory" class="btn btn-outline-success" style="font-size:xx-large" role="button">
-                        <i class='fas fa-plus-circle'></i>
-                    </a>
-                </div>
-                <select name="CategoryId" id="categories" style="display:none">
-
-                    @foreach (var c in IncomeCategories)
-                    {
-                        <option value="@c.Id"></option>
-
-                    }
-
-
-                </select>
-
-                <script>
-                    $('.select-category').click(function () {
-                        $('#category').val($(this).data('val')).trigger('change');
-                    })
-                </script>
-            }
-
-        </div>
-
-        <div class="form-group">
-            @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @Value = Income.Value, @class = "form-control form-control-lg", placeholder = "Value" } })
-            @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @Value = Income.Notes, @class = "form-control", placeholder = "Notes" } })
-            @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
-
-        </div>
-
-
-
-        <input type="submit" value="Save" class="btn btn-info" />
-    </div>
-
-</div>
 
 }
 

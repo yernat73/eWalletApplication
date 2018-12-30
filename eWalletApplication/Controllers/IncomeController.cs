@@ -259,10 +259,16 @@ namespace eWalletApplication.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 Income Income = db.Incomes.Find(id);
+                Account Account = db.Accounts.Find(Income.AccountId);
+                if(Account != null && Income != null)
+                {
+                    Account.Balance -= Income.Value; 
+                }
                 if (TryUpdateModel(Income, "", new string[] { "Value", "Notes", "AccountId", "CategoryId" }))
                 {
                     try
                     {
+                        Account.Balance += Income.Value;
                         db.SaveChanges();
 
                     }

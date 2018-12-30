@@ -14,7 +14,7 @@ namespace eWalletApplication
     {
         protected void Application_Start()
         {
-            Database.SetInitializer(new WalletDbInitializer());
+            Database.SetInitializer<WalletContext>(new DropCreateDatabaseIfModelChanges<WalletContext>());
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

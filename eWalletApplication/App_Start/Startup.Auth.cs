@@ -55,10 +55,11 @@ namespace eWalletApplication
             //   consumerKey: "",
             //   consumerSecret: "");
 
+            /*
             app.UseFacebookAuthentication(
                appId: "265623490758086",
                appSecret: "18a6df2d78e1a01f16f862b87f4da094");
-
+               */
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
                 ClientId = "264261913655-pjhaofetro8rmksdh4o5p323irsi8h8f.apps.googleusercontent.com",

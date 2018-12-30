@@ -225,6 +225,7 @@ namespace eWalletApplication.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 OutcomeCategory OutcomeCategory = db.OutcomeCategories.Find(id);
+                
                 if (TryUpdateModel(OutcomeCategory, "", new string[] { "Name", "IconId" }))
                 {
                     try
@@ -265,10 +266,16 @@ namespace eWalletApplication.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 Outcome Outcome = db.Outcomes.Find(id);
+                Account Account = db.Accounts.Find(Outcome.AccountId);
+                if (Account != null && Outcome != null)
+                {
+                    Account.Balance += Outcome.Value;
+                }
                 if (TryUpdateModel(Outcome, "", new string[] { "Value", "Notes", "AccountId", "CategoryId" }))
                 {
                     try
                     {
+                        Account.Balance -= Outcome.Value;
                         db.SaveChanges();
 
                     }
@@ -301,7 +308,7 @@ namespace eWalletApplication.Controllers
                 Account account = db.Accounts.Find(outcome.AccountId);
                 if (outcome != null)
                 {
-                    account.Balance -= outcome.Value;
+                    account.Balance += outcome.Value;
                     db.Outcomes.Remove(outcome);
                     db.SaveChanges();
                     ViewBag.SuccessMessage = "Outcome was deleted successfully";

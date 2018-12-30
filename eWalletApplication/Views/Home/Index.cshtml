@@ -1,15 +1,33 @@
 ﻿@using eWalletApplication.Models
 @using System.Globalization
+@using System.Collections.Generic
 @{
     ViewBag.Title = "Home Page";
     var Account = ViewBag.Account;
 
-    var Incomes = ViewBag.Incomes;
-    var Outcomes = ViewBag.Outcomes;
+    List<Income> Incomes = ViewBag.Incomes;
+    List<Outcome> Outcomes = ViewBag.Outcomes;
+
+    var IncomeCategories = ViewBag.Incomecategories;
+    var OutcomeCategories = ViewBag.Outcomecategories;
+    var IncomePie = ViewBag.IncomePie;
+    var OutcomePie = ViewBag.OutcomePie;
+    DateTime now = DateTime.Now;
+    
 }
+<!-- MetisMenu CSS -->
+<link href="/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
+<!-- Morris Charts CSS -->
+<link href="/vendor/morrisjs/morris.css" rel="stylesheet">
 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 
 <div class="container p-4 mx-auto">
 
@@ -19,13 +37,13 @@
 
             <div class="card text-white bg-info mb-3" style="opacity: 0.75">
                 <div class="card-header">
-                   
+
                     <form action="/Home/DeleteAccount" method="post" class="row" id="account-delete-form">
                         <div class="col">@Account.Name</div>
-                        
-                        <div class="col-2"><a href="/Home/EditAccount/@Account.Id" ><i class="fas fa-pen"></i> </a></div>
-                        <div class="col-2"><a href="#"  onclick="document.getElementById('account-delete-form').submit();"><i class="fas fa-trash"></i></a></div>
-                        
+
+                        <div class="col-2"><a href="/Home/EditAccount/@Account.Id"><i class="fas fa-pen"></i> </a></div>
+                        <div class="col-2"><a href="#" onclick="document.getElementById('account-delete-form').submit();"><i class="fas fa-trash"></i></a></div>
+
                         <input value="@Account.Id" name="Id" style="display:none" />
                     </form>
                 </div>
@@ -33,7 +51,7 @@
                     <h5 class="card-title display-4"><i class="@Account.Icon.Name"></i> $ @Account.Balance</h5>
 
                 </div>
-                                         
+
             </div>
         </div>
         <hr />
@@ -46,24 +64,135 @@
     <!-- /.row -->
     <div class="row my-3">
         <div>
-            <h1 class="lead"><i class="fas fa-chart-area"></i> Dashboard</h1>
+            <h1 class="lead"><i class="fas fa-chart-area"></i> Area Chart</h1>
         </div>
 
         <hr class="shadow my-3" />
         <div class="col-12 p-0">
             <div class="panel panel-default">
-                <div class="panel-heading">
-
-
-                </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body mt-5">
                     <div id="morris-area-chart"></div>
+
+                    <script>
+                        Morris.Area({
+                            element: 'morris-area-chart',
+                            data: [
+                            @for(int j = 3; j >= 0; j--)
+                            {
+                                DateTime start = new DateTime(now.Year, now.Month - j, 1);
+                                DateTime end = start.AddMonths(1).AddDays(-1);
+
+                                double a = 0;
+                                double b = 0;
+                                if (Incomes != null) {
+                                    a = Incomes.Where(i => i.Date >= start).Where(i => i.Date <= end).Sum(i => (double?)i.Value) ?? 1.0;
+                                }
+                                if(Outcomes != null)
+                                {
+                                    b = Outcomes.Where(i => i.Date >= start).Where(i => i.Date <= end).Sum(i => (double?)i.Value) ?? 1.0;
+                                }
+
+
+                            <text>
+                                {y: '@start.ToString("MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))', a: @a, b: @b},    
+
+                            </text>
+
+                            }
+                            
+                            ],
+                            xkey: 'y',
+                            ykeys: ['a', 'b'],
+                            labels: ['Income', 'Outcome'],
+                            lineColors: ['#44b09e', '#e01c34'],
+                            resize: true,
+                            hideHover: 'auto',
+                            parseTime: false,
+                            preUnits: '$',
+                            behaveLikeLine: true
+
+
+                        });
+                    </script>
                 </div>
                 <!-- /.panel-body -->
             </div>
         </div>
     </div>
+    <div>
+        <h1 class="lead"><i class="fas fa-chart-pie"></i> Pie Chart</h1>
+    </div>
+
+    <hr class="shadow my-3" />
+    <div class="row my-3">
+
+        <div class="col-6">
+            <h3 class="text-info" style="font-size: medium" >
+                Income: <span class="font-weight-bold">
+                    $@if (Incomes != null)
+                    {@Incomes.Sum(i => i.Value)}
+                </span>
+            </h3>
+            <div id="income-pie">
+
+            </div>
+            @if (IncomePie != null)
+            {
+                <script type="text/javascript">
+                Morris.Donut({
+                    element: 'income-pie',
+                    data: [
+                    @foreach(var pair in IncomePie)
+                    {
+                    <text>
+                        { label: "@pair.Key", value: @pair.Value},
+                    </text>
+
+                    }
+                    ],
+                    colors: ["#368B7D", "#3D9D8E", "#51BBAC", "#76C9BD"],
+                    formatter: function (y, data) { return '$' + y },
+                    resize: true
+                });
+                </script>
+            }
+
+        </div>
+        <div class="col-6">
+            <h3 class="text-danger" style="font-size: medium">
+                Outcome: <span class="font-weight-bold">
+                    $@if (Outcomes != null)
+                    {@Outcomes.Sum(o => o.Value)}
+                </span>
+            </h3>
+            <div id="outcome-pie">
+
+            </div>
+            @if (OutcomePie != null)
+            {
+                <script type="text/javascript">
+                Morris.Donut({
+                    element: 'outcome-pie',
+                    data: [
+                    @foreach(var pair in OutcomePie)
+                    {
+                    <text>
+                        { label: "@pair.Key", value: @pair.Value},
+                    </text>
+
+                    }
+                    ],
+                    colors: ["#FA6560", "#FB7D79", "#FC9592", "#FB6560"],
+                    formatter: function (y, data) { return '$' + y },
+                    resize: true
+                });
+                </script>
+            }
+        </div>
+
+    </div>
+
     <hr class="shadow my-3" />
 
     <div class="row my-3">
@@ -77,9 +206,9 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body p-0">
-                    <table class="table bg-white p-0 display responsive nowrap" cellspacing="0" width="100%" id="dataTable" data-order='[[ 2, "asc" ]]'>
+                    <table class="table bg-white p-0 display responsive nowrap" cellspacing="0" width="100%" id="dataTable" data-order='[[ 2, "desc" ]]'>
                         <thead>
-                            <tr>
+                            <tr class="text-muted">
                                 <th>Category</th>
                                 <th>Value</th>
                                 <th>Date</th>
@@ -92,27 +221,27 @@
                             {
                                 foreach (Income i in Incomes)
                                 {
-                            <tr class="text-success">
-                                <td>
-                                    <i class="@i.Category.Icon.Name"></i>
-                                    @i.Category.Name
-                                  
-                                </td>
-                                <td>
-                                    <a href="/Income/EditIncome/@i.Id">
+                                    <tr class="text-info">
+                                        <td>
+                                            <i class="@i.Category.Icon.Name"></i>
+                                            @i.Category.Name
 
-                                        @i.Value
-                                    </a>
-                                </td>
-                                <td>
-                                    @i.Date.ToString("dd MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))
-                                </td>
-                                <td  class="one">
-                                    @i.Notes
-                                </td>
+                                        </td>
+                                        <td>
+                                            <a href="/Income/EditIncome/@i.Id">
+
+                                                @i.Value
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @i.Date.ToString("dd MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))
+                                        </td>
+                                        <td class="one">
+                                            @i.Notes
+                                        </td>
 
 
-                            </tr>
+                                    </tr>
 
                                 }
                             }
@@ -120,25 +249,25 @@
                             {
                                 foreach (Outcome o in Outcomes)
                                 {
-                            <tr class="text-danger" data-href="/Outcome/EditOutcome/@o.Id" style="cursor:pointer">
-                                <td>
-                                    <i class="@o.Category.Icon.Name"></i>
-                                    @o.Category.Name
+                                    <tr class="text-danger" data-href="/Outcome/EditOutcome/@o.Id" style="cursor:pointer">
+                                        <td>
+                                            <i class="@o.Category.Icon.Name"></i>
+                                            @o.Category.Name
 
-                                </td>
-                                <td>
-                                    <a href="/Outcome/EditOutcome/@o.Id">
-                                        @o.Value
-                                    </a>
-                                </td>
-                                <td>
-                                    @o.Date.ToString("dd MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))
-                                </td>
-                                <td class="one">
-                                    @o.Notes
-                                </td>
+                                        </td>
+                                        <td>
+                                            <a href="/Outcome/EditOutcome/@o.Id">
+                                                @o.Value
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @o.Date.ToString("dd MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))
+                                        </td>
+                                        <td class="one">
+                                            @o.Notes
+                                        </td>
 
-                            </tr>
+                                    </tr>
 
                                 }
                             }
