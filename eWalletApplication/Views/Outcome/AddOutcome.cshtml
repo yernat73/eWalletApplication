@@ -42,10 +42,11 @@
                             <i class='fas fa-plus-circle'></i>
                         </a>
                     </div>
-                    <select name="AccountId" id="accounts" style="display:none">
+                    <select name="AccountId" id="account" style="display:none">
 
                         @foreach (var a in Accounts)
                         {
+                            
                             <option value="@a.Id"></option>
 
                         }
@@ -83,7 +84,7 @@
                             <i class='fas fa-plus-circle'></i>
                         </a>
                     </div>
-                    <select name="CategoryId" id="categories" style="display:none">
+                    <select name="CategoryId" id="category" style="display:none">
 
                         @foreach (var c in OutcomeCategories)
                         {

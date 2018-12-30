@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using eWalletApplication.Models;
 using Microsoft.AspNet.Identity;
 
+
 namespace eWalletApplication.Controllers
 {
     
@@ -49,82 +50,59 @@ namespace eWalletApplication.Controllers
 
         }
 
-        public ActionResult MorrisData()
-        {
-            Stack<string> stack = new Stack<string>();
-
-            var data = "$(function() { Morris.Area({element: 'morris-area-chart',data: [";
-            string UserId = User.Identity.GetUserId();
-            DateTime today = DateTime.Today;
-
-            DateTime start = new DateTime(today.Year, today.Month, 1);
-            DateTime end = start.AddMonths(1);
-            while (true)
-            {
-                string tmp = "";
-                double income = 0;
-                double outcome = 0;
-                var Incomes = db.Incomes.Where(i => i.UserId == UserId).Where(i => i.Date >= start && i.Date < end).ToList();
-                var Outcomes = db.Outcomes.Where(i => i.UserId == UserId).Where(i => i.Date >= start && i.Date < end).ToList();
-                if(Incomes.Count == 0 || Outcomes.Count == 0)
-                {
-                    break;
-                }
-                foreach(Income i in Incomes)
-                {
-                    income += i.Value;
-                }
-                foreach (Outcome o in Outcomes)
-                {
-                    outcome += o.Value;
-                }
-                stack.Push("{Period: "+start.Year+"/"+start.Month+", Income: "+income+", Outcome: "+outcome+"},");
-
-                start.AddMonths(-1);
-                end.AddMonths(-1);
-
-
-            }
-            while (stack.Peek() != null)
-            {
-                data += stack.Pop();
-            }
-            data += "], xkey: 'Period', ykeys: ['Income', 'Outcome'], labels: ['Income', 'Outcome'], pointSize: 2, hideHover: 'auto', resize: true }); });";
-            
-
-
-            return JavaScript(data);
-        } 
-
-
-
         public ActionResult Index(int id)
         {
+            
+
             if (Request.IsAuthenticated)
             {
                 string UserId = User.Identity.GetUserId();
                 Account account = null;
+
                 List<Income> Incomes;
                 List<Outcome> Outcomes;
-                if(id != 0)
+                List<IncomeCategory> IncomeCategories;
+                List<OutcomeCategory> OutcomeCategories;
+                IncomeCategories = db.IncomeCategories.Where(c => c.UserId == UserId).ToList<IncomeCategory>();
+                OutcomeCategories = db.OutcomeCategories.Where(c => c.UserId == UserId).ToList<OutcomeCategory>();
+
+                var IncomePie = new Dictionary<string, double>();
+                var OutcomePie = new Dictionary<string, double>();
+
+                if (id != 0)
                 {
                     Incomes = db.Incomes.Where(i => i.UserId == UserId).Where(i => i.AccountId == id).ToList<Income>();
                     Outcomes = db.Outcomes.Where(i => i.UserId == UserId).Where(i => i.AccountId == id).ToList<Outcome>();
                     account = db.Accounts.Find(id);
-                    if(account.UserId != UserId)
+                    if (account.UserId != UserId)
                     {
                         account = null;
                     }
+
 
                 }
                 else
                 {
                     Incomes = db.Incomes.Where(i => i.UserId == UserId).ToList<Income>();
                     Outcomes = db.Outcomes.Where(i => i.UserId == UserId).ToList<Outcome>();
+                    
+
                 }
 
-                
+               
+                foreach (IncomeCategory c in IncomeCategories)
+                {
+                    double sum = Incomes.Where(i => i.CategoryId == c.Id).Sum(i => i.Value);
+                    IncomePie.Add(c.Name, sum);
 
+                }
+                foreach (OutcomeCategory c in OutcomeCategories)
+                {
+                    double sum = Outcomes.Where(o => o.CategoryId == c.Id).Sum(o => o.Value);
+                    OutcomePie.Add(c.Name, sum);
+
+                }
+                
 
                 foreach (Income income in Incomes)
                 {
@@ -140,6 +118,8 @@ namespace eWalletApplication.Controllers
                 ViewBag.Incomes = Incomes;
                 ViewBag.Outcomes = Outcomes;
                 ViewBag.Account = account;
+                ViewBag.IncomePie = IncomePie;
+                ViewBag.OutcomePie = OutcomePie;
                 LoadView();
                 return View();
             }

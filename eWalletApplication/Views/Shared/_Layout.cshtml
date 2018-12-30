@@ -1,6 +1,7 @@
 ﻿@using System.Activities.Statements
 @using Microsoft.AspNet.Identity
 @using eWalletApplication.Models
+@using System.Globalization
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,12 +12,12 @@
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <!-- DataTable -->
-    <link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.dataTables.min.css" rel="stylesheet">
+    <!-- DataTable -->"
+    <link href=https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.dataTables.min.css" rel="stylesheet"/>
 
-    <!-- Morris Charts CSS -->
-    <link href="/Vendor/morrisjs/morris.css" rel="stylesheet">
+
     <!-- Custom Fonts -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
@@ -28,6 +29,15 @@
         var OutcomeCategories = ViewBag.Outcomecategories;
 
     }
+    <style>
+        .text-info {
+            color: #37897E !important;
+        }
+
+        .btn-info {
+            background-color: #3E9B8F !important;
+        }
+    </style>
 
 </head>
 
@@ -36,7 +46,7 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar Holder -->
-        <nav id="sidebar" class="" style="opacity: 0.9">
+        <nav id="sidebar" class="" style="opacity: 0.9;">
             <div class="sidebar-header">
                 <a href="/Home/Index/0">
                     <img src="~/Images/logo_light_1.png" class="img-fluid" />
@@ -53,13 +63,13 @@
                         {
                             <li>
                                 <a href="/Home/Index/0"><i class="fas fa-money-check"></i> All Accounts</a>
-                                
+
                             </li>
                             foreach (var a in ViewBag.Accounts)
                             {
                                 <li>
                                     <a href="/Home/Index/@a.Id"><i class="@a.Icon.Name"></i> @a.Name </a>
-                                    
+
                                 </li>
                             }
                         }
@@ -67,9 +77,9 @@
                         <li>
                             <div class="row m-0">
                                 <a href="/Home/AddAccount" class="text-center col"><i class="fas fa-plus"></i></a>
-                                <a href="/Home/Retrieve" class="text-center col" ><i class="fas fa-reply"></i></a>
+                                <a href="/Home/Retrieve" class="text-center col"><i class="fas fa-reply"></i></a>
                             </div>
-                            
+
                         </li>
                     </ul>
                 </li>
@@ -81,7 +91,7 @@
                                 <div class="row m-0">
                                     <a href="#" class="col-8">Income</a>
                                     <a href="/Income/AddIncomeCategory" class="text-center col"><i class="fas fa-plus"></i></a>
-                                    
+
                                 </div>
                             </li>
                             @if (IncomeCategories != null)
@@ -89,7 +99,7 @@
                                 foreach (IncomeCategory category in IncomeCategories)
                                 {
                                     <li>
-                                        <a href="/Income/EditIncomeCategory/@category.Id" ><i class="@category.Icon.Name ml-3"></i> @category.Name</a>
+                                        <a href="/Income/EditIncomeCategory/@category.Id"><i class="@category.Icon.Name ml-3"></i> @category.Name</a>
                                     </li>
                                 }
                             }
@@ -97,7 +107,7 @@
                                 <div class="row m-0">
                                     <a href="#" class="col-8">Outcome</a>
                                     <a href="/Outcome/AddOutcomeCategory" class="text-center col"><i class="fas fa-plus"></i></a>
-                                   
+
                                 </div>
                             </li>
                             @if (OutcomeCategories != null)
@@ -145,19 +155,22 @@
                             <span></span>
                             <span></span>
                         </button>
-                        
+                        <div class="text-dark">
+                            @{
+                                DateTime now = DateTime.Now;
+
+                            }
+                            @now.ToString("MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))
+                        </div>
                         <div>
 
                             <ul class="nav">
 
                                 <li class="nav-item mx-3">
-                                    <a href="/Income/AddIncome" class="lead text-success"><i class="fas fa-plus"></i></a>
+                                    <a href="/Income/AddIncome" class="lead text-info"><i class="fas fa-plus"></i></a>
                                 </li>
                                 <li class="nav-item mx-3">
                                     <a href="/Outcome/AddOutcome" class="lead text-danger"><i class="fas fa-minus"></i></a>
-                                </li>
-                                <li class="nav-item mx-3">
-                                    <a href="#" title="Make tranfer" class="lead text-info"><i class="fas fa-exchange-alt"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -197,7 +210,7 @@
             </main>
 
             <footer class="footer p-5 bg-dark">
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+                <p>&copy; @DateTime.Now.Year - eWallet Application</p>
             </footer>
 
         </div>
@@ -211,20 +224,16 @@
 
         <!-- Metis Menu Plugin JavaScript -->
         <script src="/Vendor/metisMenu/metisMenu.min.js"></script>
-        <!-- Morris Charts JavaScript -->
-        <script src="/Vendor/raphael/raphael.min.js"></script>
 
-        <script src="/Vendor/morrisjs/morris.min.js"></script>
-        <script src="/Home/MorrisData></script>
-        <!-- Custom Theme JavaScript -->
-        <script src="/dist/js/sb-admin-2.js"></script>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/af-2.3.2/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-1.5.0/sl-1.2.6/datatables.min.js"></script>
+        <!-- Data Table js-->
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
 
 
         @RenderSection("scripts", required: false)
+
         <script type="text/javascript">
             $(document).ready(function () {
                 $('#sidebarCollapse').on('click', function () {

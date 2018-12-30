@@ -8,80 +8,90 @@
     var Icons = ViewBag.IncomeCategoryIcons;
     var Category = ViewBag.IncomeCategory;
 }
+<form action="/Income/DeleteIncomeCategory" method="post" class="" id="delete-form">
+    <input value="@Category.Id" name="Id" style="display:none" />
+</form>
 
+    @using (Html.BeginForm("EditIncomeCategory", "Income", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm("EditIncomeCategory", "Income", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+        <div class="p-4">
+            <div>
 
-<div class="p-4">
-    <div >
-        <form action="/Income/DeleteIncomeCategory" method="post" class="" id="account-delete-form">
-            <div class="row">
-                <div class="col">
-                    <h4 class="lead">
-                        <i class="far fa-bookmark"></i> Edit Category
-                    </h4>
-                </div>
-                <div class="col-2">
-                    <a href="#" class="col text-danger" onclick="document.getElementById('account-delete-form').submit();"><i class="fas fa-trash"></i></a>
-                    <input value="@Category.Id" name="Id" style="display:none" />
-                </div>
-
-            </div>
-
-            
-        </form>
-    </div>
-    
-    <hr class="shadow my-3" />
-
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-    <input name="Id" value="@Category.Id" hidden />
-    <div class="">
-        <div class="row mb-4">
-
-            @if (Icons != null)
-            {
-                foreach (var i in Icons)
-                {
-                    <div class="col m-2 p-0">
-                        <a href="#" data-val="@i.Id" id="icon-@i.Id" class="btn btn-outline-dark select-change" style="font-size:xx-large" role="button">
-                            <i class='@i.Name'></i>
-                        </a>
+                <div class="row">
+                    <div class="col">
+                        <h4 class="lead">
+                            <i class="far fa-bookmark"></i> Edit Category
+                        </h4>
                     </div>
-                }
-                <select name="IconId" id="icon" style="display:none">
+                    <div class="col-2">
+                        <a href="#" class="col text-danger" onclick="document.getElementById('delete-form').submit();"><i class="fas fa-trash"></i></a>
+                        
+                    </div>
 
-                    @foreach (var i in Icons)
+                </div>
+
+
+    
+            </div>
+    
+            <hr class="shadow my-3" />
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <input name="Id" value="@Category.Id" hidden />
+            <div class="">
+                <div class="row mb-4">
+
+                    @if (Icons != null)
                     {
-                        <option value="@i.Id"></option>
+                        foreach (var i in Icons)
+                        {
+                            <div class="col m-2 p-0">
+                                <a href="#" data-val="@i.Id" id="icon-@i.Id" class="btn btn-outline-dark select-change" style="font-size:xx-large" role="button">
+                                    <i class='@i.Name'></i>
+                                </a>
+                            </div>
+                        }
+                            <select name="IconId" id="icon" style="display:none">
 
+                                @foreach (var i in Icons)
+                                {
+                                    if (i.Id == Category.IconId)
+                                    {
+                                        <option value="@i.Id" selected></option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@i.Id"></option>
+                                    }
+
+
+                                }
+
+
+                            </select>
+
+                        <script>
+                            $('.select-change').click(function () {
+                                $('#icon').val($(this).data('val')).trigger('change');
+                            })
+                        </script>
                     }
 
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @Value = Category.Name, @class = "form-control form-control-lg", placeholder = "Name" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
 
-                </select>
+                </div>
 
-                <script>
-                    $('.select-change').click(function () {
-                        $('#icon').val($(this).data('val')).trigger('change');
-                    })
-                </script>
-            }
 
-        </div>
-        <div class="form-group">
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @Value = Category.Name, @class = "form-control form-control-lg", placeholder = "Name" } })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+                <input type="submit" value="Save" class="btn btn-info" />
+            </div>
 
         </div>
-
-
-
-        <input type="submit" value="Save" class="btn btn-info" />
-    </div>
-
-</div>
 
 }

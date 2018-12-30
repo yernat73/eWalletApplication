@@ -8,15 +8,16 @@
     var Icons = ViewBag.OutcomeCategoryIcons;
     var Category = ViewBag.OutcomeCategory;
 }
-
-
+<form action="/Outcome/DeleteOutcomeCategory" method="post" class="" id="delete-form">
+    <input value="@Category.Id" name="Id" style="display:none" />
+</form>
 @using (Html.BeginForm("EditOutcomeCategory", "Outcome", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
 <div class="p-4">
     <div >
-        <form action="/Outcome/DeleteOutcomeCategory" method="post" class="" id="account-delete-form">
+        
             <div class="row">
                 <div class="col">
                     <h4 class="lead">
@@ -24,14 +25,14 @@
                     </h4>
                 </div>
                 <div class="col-2">
-                    <a href="#" class="col text-danger" onclick="document.getElementById('account-delete-form').submit();"><i class="fas fa-trash"></i></a>
-                    <input value="@Category.Id" name="Id" style="display:none" />
+                    <a href="#" class="col text-danger" onclick="document.getElementById('delete-form').submit();"><i class="fas fa-trash"></i></a>
+                    
                 </div>
 
             </div>
 
             
-        </form>
+        
     </div>
     
     <hr class="shadow my-3" />
@@ -52,16 +53,23 @@
                         </a>
                     </div>
                 }
-                <select name="IconId" id="icon" style="display:none">
+                    <select name="IconId" id="icon" style="display:none">
 
-                    @foreach (var i in Icons)
-                    {
-                        <option value="@i.Id"></option>
+                        @foreach (var i in Icons)
+                        {
+                            if (i.Id == Category.IconId)
+                            {
+                                <option value="@i.Id" selected></option>
+                            }
+                            else
+                            {
+                                <option value="@i.Id"></option>
+                            }
 
-                    }
+                        }
 
 
-                </select>
+                    </select>
 
                 <script>
                     $('.select-change').click(function () {
